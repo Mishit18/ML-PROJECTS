@@ -1,0 +1,108 @@
+# PPO Configuration File
+# Professional hyperparameter settings based on empirical best practices
+
+# Environment settings
+env:
+  name: "InventoryManagement-v0"
+  normalize_observations: true
+  normalize_rewards: false
+  clip_observations: 10.0
+  clip_rewards: 10.0
+
+# PPO Algorithm hyperparameters
+ppo:
+  # Learning rate for both actor and critic
+  learning_rate: 3.0e-4
+  
+  # Discount factor - how much to value future rewards
+  # Higher values (closer to 1.0) make agent more farsighted
+  gamma: 0.99
+  
+  # GAE lambda - bias-variance tradeoff in advantage estimation
+  # Higher values reduce bias but increase variance
+  gae_lambda: 0.95
+  
+  # PPO clipping parameter - limits policy update magnitude
+  # Prevents destructively large policy updates
+  clip_epsilon: 0.2
+  
+  # Entropy bonus coefficient - encourages exploration
+  # Higher values increase exploration, lower values exploit more
+  entropy_coef: 0.01
+  
+  # Value function loss coefficient
+  value_loss_coef: 0.5
+  
+  # Maximum gradient norm for clipping (prevents exploding gradients)
+  max_grad_norm: 0.5
+  
+  # Number of epochs to optimize on each batch of rollout data
+  # More epochs = more sample efficient but risk overfitting to old data
+  n_epochs: 10
+  
+  # Mini-batch size for SGD updates
+  batch_size: 64
+  
+  # Number of steps to collect before each update
+  # Larger values = more stable gradients but less frequent updates
+  n_steps: 2048
+  
+  # Target KL divergence for early stopping (optional)
+  # If policy changes too much, stop optimization early
+  target_kl: 0.01
+  use_target_kl: false
+
+# Network architecture
+network:
+  # Hidden layer sizes for actor and critic
+  hidden_sizes: [64, 64]
+  
+  # Activation function: "tanh", "relu", "elu"
+  activation: "tanh"
+  
+  # Initialize last layer with smaller weights for stability
+  ortho_init: true
+  last_layer_scale: 0.01
+
+# Training settings
+training:
+  # Total number of environment steps
+  total_timesteps: 200000
+  
+  # Random seed for reproducibility
+  seed: 42
+  
+  # Logging frequency (in timesteps)
+  log_interval: 2048
+  
+  # Evaluation frequency (in timesteps)
+  eval_interval: 10000
+  
+  # Number of evaluation episodes
+  n_eval_episodes: 10
+  
+  # Save model frequency (in timesteps)
+  save_interval: 50000
+  
+  # Learning rate annealing
+  anneal_lr: true
+
+# Experimental settings
+experiment:
+  # Name for this experimental run
+  name: "ppo_inventory_baseline"
+  
+  # Directory to save results
+  save_dir: "results"
+  
+  # Whether to save videos of agent behavior
+  record_video: false
+  
+  # Video recording frequency (in episodes)
+  video_interval: 50
+  
+  # Use tensorboard for logging
+  use_tensorboard: true
+  
+  # Multiple seeds for statistical significance
+  seeds: [42, 123, 456, 789, 1337]

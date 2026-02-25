@@ -1,0 +1,59 @@
+# Conditioned DDPM with Classifier-Free Guidance
+
+# Model Architecture
+model:
+  image_size: 32
+  in_channels: 3
+  model_channels: 128
+  out_channels: 3
+  num_res_blocks: 2
+  attention_resolutions: [16, 8]
+  channel_mult: [1, 2, 2, 2]
+  num_heads: 4
+  dropout: 0.1
+  use_scale_shift_norm: true
+
+# Diffusion Process
+diffusion:
+  timesteps: 1000
+  beta_schedule: "cosine"
+  beta_start: 0.0001
+  beta_end: 0.02
+  
+# Training
+training:
+  batch_size: 128
+  num_epochs: 500
+  learning_rate: 0.0002
+  weight_decay: 0.0
+  ema_decay: 0.9999
+  gradient_clip: 1.0
+  num_workers: 4
+  save_interval: 50
+  sample_interval: 10
+  
+# Conditioning (Classifier-Free Guidance)
+conditioning:
+  enabled: true
+  num_classes: 10
+  dropout_prob: 0.1  # Probability of dropping condition during training
+  embedding_dim: 128
+  
+# Sampling
+sampling:
+  guidance_scale: 3.0  # w in: ε̃ = ε_u + w(ε_c - ε_u)
+  ddim_steps: 50
+  ddim_eta: 0.0
+  
+# Dataset
+dataset:
+  name: "cifar10"
+  data_dir: "./data/cifar10"
+  
+# Logging
+logging:
+  log_dir: "./experiments/conditioned"
+  use_tensorboard: true
+  
+# Reproducibility
+seed: 42
