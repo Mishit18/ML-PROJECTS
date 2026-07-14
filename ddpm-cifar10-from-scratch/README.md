@@ -2,6 +2,14 @@
 
 PyTorch implementation of a Denoising Diffusion Probabilistic Model (DDPM) for unconditional CIFAR-10 generation. The diffusion algorithm is implemented from PyTorch primitives only: no `diffusers`, no `guided-diffusion`.
 
+## Project Highlights
+
+- Implements the DDPM forward process, learned reverse process, and epsilon-prediction objective from scratch.
+- Uses a residual U-Net with sinusoidal timestep conditioning, GroupNorm/SiLU blocks, skip connections, and multi-head self-attention.
+- Supports linear and cosine schedules, DDPM ancestral sampling, and deterministic DDIM sampling.
+- Includes EMA weights, mixed precision training, TF32 acceleration, gradient accumulation, warmup + cosine LR decay, and resumable checkpoints.
+- Logs training curves, sample grids, FID, Inception Score, sampler speed, and ablation metadata.
+
 ## Quick Start
 
 ```powershell
@@ -9,21 +17,29 @@ cd "D:\GITHUB\ML PROJECTS\ddpm-cifar10-from-scratch"
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-python train.py --config configs/cifar10_small.yaml
+python train.py --config configs/cifar10_rtx4060_best.yaml
+```
+
+Monitor the active run:
+
+```powershell
+python monitor.py --run-dir runs/cifar10_rtx4060_best
 ```
 
 Generate samples from the latest checkpoint:
 
 ```powershell
-python sample.py --run-dir runs/cifar10_small --sampler ddim --ddim-steps 50 --num-samples 64
-python sample.py --run-dir runs/cifar10_small --sampler ddpm --num-samples 64
+python sample.py --run-dir runs/cifar10_rtx4060_best --sampler ddim --ddim-steps 50 --num-samples 64
+python sample.py --run-dir runs/cifar10_rtx4060_best --sampler ddpm --num-samples 64
 ```
 
 Compute FID and Inception Score:
 
 ```powershell
-python evaluate.py --run-dir runs/cifar10_small --sampler ddim --ddim-steps 50 --num-samples 50000
+python evaluate.py --run-dir runs/cifar10_rtx4060_best --sampler ddim --ddim-steps 50 --num-samples 50000
 ```
+
+Metrics are written to `runs/<run_name>/metrics/metrics.csv` and `runs/<run_name>/metrics/*.json`.
 
 ## 1. U-Net Architecture
 
@@ -35,6 +51,7 @@ Recommended CIFAR-10 model:
 | --- | ---: | --- | --- | --- | --- |
 | Small | 64 | `[1, 2, 2, 4]` | 32, 16, 8, 4 | 16 | T4 initial results |
 | Medium | 128 | `[1, 2, 2, 4]` | 32, 16, 8, 4 | 16, 8 | A100 or longer T4 run |
+| RTX4060 best | 128 | `[1, 2, 2, 4]` | 32, 16, 8, 4 | 16, 8 | Main local run |
 
 Each resolution level has 2 residual blocks. The encoder starts at 32x32, then downsamples to 16x16, 8x8, and 4x4. The decoder mirrors the encoder and concatenates skip activations from matching encoder stages.
 
@@ -166,6 +183,18 @@ Small T4-friendly setup:
 
 A T4 under 6 hours should give recognizable samples, but do not expect benchmark-level FID from a short run. A100 or longer T4 training is better for final resume numbers.
 
+Main RTX 4060 setup:
+
+- Config: `configs/cifar10_rtx4060_best.yaml`
+- Parameters: about 71M
+- Batch size: 64
+- Gradient accumulation: 2
+- Effective batch size: 128
+- Training budget: 300k optimizer steps
+- Optimizer: AdamW, LR `2e-4`
+- LR schedule: 2k-step warmup, cosine decay to 5% of peak LR
+- Precision: AMP + TF32
+
 ## 6. Evaluation
 
 FID measures the Frechet distance between Inception feature distributions of real and generated images. Lower is better. It is sensitive to sample count, preprocessing, and implementation.
@@ -203,6 +232,14 @@ Use one CSV table:
 run,params_m,schedule,sampler,steps,ema,fid,is_mean,is_std,samples_per_sec,train_hours
 ```
 
+Ablation assets:
+
+- `configs/abl_cifar10_linear_rtx4060.yaml`: same medium U-Net with a linear schedule.
+- `configs/abl_cifar10_small_cosine.yaml`: smaller U-Net for model-size ablation.
+- `evaluate.py --weights ema` vs `evaluate.py --weights raw`: EMA ablation from the same checkpoint.
+- `benchmark_sampler.py`: DDIM/DDPM sampler speed comparison.
+- `results/ablation_plan.csv`: experiment checklist.
+
 ## 8. Code Structure
 
 ```text
@@ -219,6 +256,13 @@ ddpm-cifar10-from-scratch/
   train.py        # training loop
   sample.py       # DDPM/DDIM sample generation
   evaluate.py     # FID and Inception Score
+  monitor.py      # training status utility
+  benchmark_sampler.py
+  docs/
+    EXPERIMENT_REPORT.md
+    TROUBLESHOOTING.md
+  results/
+    ablation_plan.csv
 ```
 
 Log during training:

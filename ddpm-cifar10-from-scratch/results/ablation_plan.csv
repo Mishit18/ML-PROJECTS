@@ -1,0 +1,6 @@
+experiment,config,comparison,metric,notes
+best_cosine,configs/cifar10_rtx4060_best.yaml,main result,FID/IS,71M-param cosine model with EMA
+linear_schedule,configs/abl_cifar10_linear_rtx4060.yaml,cosine vs linear,FID/IS,keep model size and training budget fixed
+small_model,configs/abl_cifar10_small_cosine.yaml,small vs medium,FID/IS,parameter-count ablation
+ema_vs_raw,runs/cifar10_rtx4060_best,last checkpoint,FID/IS,evaluate same checkpoint with --weights ema and --weights raw
+ddim_speed,runs/cifar10_rtx4060_best,DDIM 25/50/100 vs DDPM 1000,samples/sec and FID,use benchmark_sampler.py and evaluate.py

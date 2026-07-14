@@ -1,4 +1,6 @@
 import argparse
+import json
+import time
 from pathlib import Path
 
 import torch
@@ -19,6 +21,7 @@ def main():
     parser.add_argument("--eta", type=float, default=0.0)
     parser.add_argument("--num-samples", type=int, default=64)
     parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--weights", choices=["ema", "raw"], default="ema")
     parser.add_argument("--save-images", action="store_true")
     args = parser.parse_args()
 
@@ -27,12 +30,14 @@ def main():
     ckpt = torch.load(ckpt_path, map_location=device)
     config = ckpt["config"]
     model, diffusion = build_model_and_diffusion(config, device)
-    model.load_state_dict(ckpt["ema"])
+    weight_key = "ema" if args.weights == "ema" and "ema" in ckpt else "model"
+    model.load_state_dict(ckpt[weight_key])
     model.eval()
 
-    out_dir = ensure_dir(Path(args.run_dir) / f"samples_{args.sampler}")
+    out_dir = ensure_dir(Path(args.run_dir) / f"samples_{args.sampler}_{args.weights}")
     generated = 0
     first_batch = None
+    start = time.time()
     for batch_start in tqdm(range(0, args.num_samples, args.batch_size), desc="sampling"):
         bsz = min(args.batch_size, args.num_samples - batch_start)
         shape = (bsz, config["channels"], config["image_size"], config["image_size"])
@@ -47,8 +52,22 @@ def main():
                 save_image(image, out_dir / f"{generated + i:06d}.png")
         generated += bsz
 
+    elapsed = time.time() - start
     save_sample_grid(first_batch[:64], out_dir / "grid.png")
+    metadata = {
+        "checkpoint": str(ckpt_path),
+        "weights": weight_key,
+        "sampler": args.sampler,
+        "ddim_steps": args.ddim_steps if args.sampler == "ddim" else config["diffusion"]["timesteps"],
+        "eta": args.eta,
+        "num_samples": generated,
+        "seconds": elapsed,
+        "samples_per_second": generated / elapsed,
+    }
+    with open(out_dir / "metadata.json", "w", encoding="utf-8") as f:
+        json.dump(metadata, f, indent=2)
     print(f"saved grid to {out_dir / 'grid.png'}")
+    print(f"sampling speed: {metadata['samples_per_second']:.2f} samples/sec")
     if args.save_images:
         print(f"saved {generated} images to {out_dir}")
 

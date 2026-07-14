@@ -1,4 +1,7 @@
 import argparse
+import csv
+import json
+import time
 from pathlib import Path
 
 import torch
@@ -7,6 +10,7 @@ from torchmetrics.image.inception import InceptionScore
 from tqdm import tqdm
 
 from train import build_model_and_diffusion
+from src.ddpm import count_parameters
 from src.ddpm.data import make_cifar10_loader
 from src.ddpm.utils import denorm, latest_checkpoint
 
@@ -24,6 +28,8 @@ def main():
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--sampler", choices=["ddpm", "ddim"], default="ddim")
     parser.add_argument("--ddim-steps", type=int, default=50)
+    parser.add_argument("--weights", choices=["ema", "raw"], default="ema")
+    parser.add_argument("--out", default=None)
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -31,7 +37,8 @@ def main():
     ckpt = torch.load(ckpt_path, map_location=device)
     config = ckpt["config"]
     model, diffusion = build_model_and_diffusion(config, device)
-    model.load_state_dict(ckpt["ema"])
+    weight_key = "ema" if args.weights == "ema" and "ema" in ckpt else "model"
+    model.load_state_dict(ckpt[weight_key])
     model.eval()
 
     fid = FrechetInceptionDistance(feature=2048, normalize=False).to(device)
@@ -47,6 +54,7 @@ def main():
             break
 
     generated = 0
+    start = time.time()
     for _ in tqdm(range(0, args.num_samples, args.batch_size), desc="generated stats"):
         bsz = min(args.batch_size, args.num_samples - generated)
         shape = (bsz, config["channels"], config["image_size"], config["image_size"])
@@ -59,9 +67,42 @@ def main():
         inception.update(images)
         generated += bsz
 
+    elapsed = time.time() - start
+    fid_value = fid.compute().item()
     is_mean, is_std = inception.compute()
-    print(f"FID: {fid.compute().item():.4f}")
+    metrics = {
+        "run_dir": str(args.run_dir),
+        "checkpoint": str(ckpt_path),
+        "weights": weight_key,
+        "sampler": args.sampler,
+        "steps": args.ddim_steps if args.sampler == "ddim" else config["diffusion"]["timesteps"],
+        "num_samples": generated,
+        "fid": fid_value,
+        "inception_score_mean": is_mean.item(),
+        "inception_score_std": is_std.item(),
+        "sampling_seconds": elapsed,
+        "samples_per_second": generated / elapsed,
+        "schedule": config["diffusion"]["schedule"],
+        "base_channels": config["model"]["base_channels"],
+        "params_m": count_parameters(model) / 1e6,
+    }
+    out_dir = Path(args.out) if args.out else Path(args.run_dir) / "metrics"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    suffix = f"{args.sampler}{metrics['steps']}_{args.weights}_{generated}"
+    with open(out_dir / f"metrics_{suffix}.json", "w", encoding="utf-8") as f:
+        json.dump(metrics, f, indent=2)
+    csv_path = out_dir / "metrics.csv"
+    write_header = not csv_path.exists()
+    with open(csv_path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=list(metrics.keys()))
+        if write_header:
+            writer.writeheader()
+        writer.writerow(metrics)
+
+    print(f"FID: {fid_value:.4f}")
     print(f"IS: {is_mean.item():.4f} +/- {is_std.item():.4f}")
+    print(f"samples/sec: {metrics['samples_per_second']:.2f}")
+    print(f"saved metrics to {out_dir}")
 
 
 if __name__ == "__main__":

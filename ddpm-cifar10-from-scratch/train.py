@@ -54,12 +54,13 @@ def make_scheduler(optimizer, config: dict, steps_per_epoch: int):
     return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda), total_steps
 
 
-def save_checkpoint(path: Path, model, ema, optimizer, scaler, epoch: int, step: int, config: dict) -> None:
+def save_checkpoint(path: Path, model, ema, optimizer, scheduler, scaler, epoch: int, step: int, config: dict) -> None:
     torch.save(
         {
             "model": model.state_dict(),
             "ema": ema.ema_model.state_dict(),
             "optimizer": optimizer.state_dict(),
+            "scheduler": scheduler.state_dict(),
             "scaler": scaler.state_dict(),
             "epoch": epoch,
             "step": step,
@@ -109,8 +110,11 @@ def main():
         scaler.load_state_dict(ckpt["scaler"])
         start_epoch = ckpt["epoch"] + 1
         step = ckpt["step"]
-        for _ in range(step):
-            scheduler.step()
+        if "scheduler" in ckpt:
+            scheduler.load_state_dict(ckpt["scheduler"])
+        else:
+            for _ in range(step):
+                scheduler.step()
 
     print(
         f"device={device} parameters={count_parameters(model) / 1e6:.2f}M "
@@ -118,7 +122,8 @@ def main():
     )
     log_path = out_dir / "train_log.csv"
     if not log_path.exists():
-        log_path.write_text("step,epoch,loss,lr,seconds\n", encoding="utf-8")
+        log_path.write_text("step,epoch,loss,lr,grad_norm,epoch_seconds\n", encoding="utf-8")
+    log_header = log_path.read_text(encoding="utf-8").splitlines()[0]
 
     for epoch in range(start_epoch, config["train"]["epochs"]):
         model.train()
@@ -137,7 +142,7 @@ def main():
             pbar.set_postfix(loss=f"{loss.item():.4f}")
             if (batch_idx + 1) % grad_accum_steps == 0:
                 scaler.unscale_(optimizer)
-                torch.nn.utils.clip_grad_norm_(model.parameters(), config["train"]["grad_clip"])
+                grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), config["train"]["grad_clip"])
                 scaler.step(optimizer)
                 scaler.update()
                 optimizer.zero_grad(set_to_none=True)
@@ -148,7 +153,13 @@ def main():
                 if step % config["train"]["log_every"] == 0:
                     elapsed = time.time() - epoch_start
                     with open(log_path, "a", encoding="utf-8") as f:
-                        f.write(f"{step},{epoch},{loss.item():.6f},{optimizer.param_groups[0]['lr']:.8f},{elapsed:.2f}\n")
+                        if "grad_norm" in log_header:
+                            f.write(
+                                f"{step},{epoch},{loss.item():.6f},{optimizer.param_groups[0]['lr']:.8f},"
+                                f"{float(grad_norm):.6f},{elapsed:.2f}\n"
+                            )
+                        else:
+                            f.write(f"{step},{epoch},{loss.item():.6f},{optimizer.param_groups[0]['lr']:.8f},{elapsed:.2f}\n")
                 if step >= total_steps:
                     break
 
@@ -163,8 +174,18 @@ def main():
             save_sample_grid(samples, samples_dir / f"epoch_{epoch + 1:04d}_ddim50.png")
 
         if (epoch + 1) % config["train"]["save_every"] == 0 or epoch == config["train"]["epochs"] - 1:
-            save_checkpoint(out_dir / f"checkpoint_{epoch + 1:04d}.pt", model, ema, optimizer, scaler, epoch, step, config)
-            save_checkpoint(out_dir / "last.pt", model, ema, optimizer, scaler, epoch, step, config)
+            save_checkpoint(
+                out_dir / f"checkpoint_{epoch + 1:04d}.pt",
+                model,
+                ema,
+                optimizer,
+                scheduler,
+                scaler,
+                epoch,
+                step,
+                config,
+            )
+            save_checkpoint(out_dir / "last.pt", model, ema, optimizer, scheduler, scaler, epoch, step, config)
 
         if step >= total_steps:
             break
