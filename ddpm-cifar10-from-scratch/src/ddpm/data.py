@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
@@ -10,7 +12,8 @@ def make_cifar10_loader(data_dir: str, batch_size: int, num_workers: int, train:
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ]
     )
-    dataset = datasets.CIFAR10(data_dir, train=train, transform=transform, download=True)
+    extracted = Path(data_dir) / "cifar-10-batches-py"
+    dataset = datasets.CIFAR10(data_dir, train=train, transform=transform, download=not extracted.exists())
     return DataLoader(
         dataset,
         batch_size=batch_size,
