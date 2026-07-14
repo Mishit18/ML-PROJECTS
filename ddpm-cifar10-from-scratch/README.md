@@ -261,8 +261,30 @@ ddpm-cifar10-from-scratch/
   docs/
     EXPERIMENT_REPORT.md
     TROUBLESHOOTING.md
+    QUALITY_CHECKLIST.md
   results/
     ablation_plan.csv
+```
+
+## Quality Gates
+
+Run static project checks:
+
+```powershell
+python validate_config.py configs/*.yaml
+python -m pytest tests
+```
+
+Run a fast learning sanity check:
+
+```powershell
+python overfit_one_batch.py --config configs/cifar10_small.yaml --steps 200
+```
+
+Generate a compact report after training/evaluation:
+
+```powershell
+python make_report.py --run-dir runs/cifar10_rtx4060_best --out results/REPORT.md
 ```
 
 Log during training:

@@ -8,6 +8,7 @@ from torch.amp import GradScaler, autocast
 from tqdm import tqdm
 
 from src.ddpm import GaussianDiffusion, UNet, count_parameters
+from src.ddpm.config import validate_config
 from src.ddpm.data import make_cifar10_loader
 from src.ddpm.ema import EMA
 from src.ddpm.utils import ensure_dir, load_config, save_config, save_sample_grid, seed_everything
@@ -77,6 +78,7 @@ def main():
     args = parser.parse_args()
 
     config = load_config(args.config)
+    validate_config(config)
     seed_everything(config["seed"])
     configure_torch(config)
     out_dir = ensure_dir(config["out_dir"])
