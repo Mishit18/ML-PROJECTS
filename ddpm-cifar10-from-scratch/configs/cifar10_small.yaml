@@ -1,0 +1,35 @@
+seed: 42
+data_dir: ./data
+out_dir: ./runs/cifar10_small
+
+image_size: 32
+channels: 3
+batch_size: 128
+num_workers: 4
+
+model:
+  base_channels: 64
+  channel_mults: [1, 2, 2, 4]
+  num_res_blocks: 2
+  attention_resolutions: [16]
+  num_heads: 4
+  dropout: 0.1
+  time_emb_mult: 4
+
+diffusion:
+  timesteps: 1000
+  schedule: cosine
+  beta_start: 0.0001
+  beta_end: 0.02
+
+train:
+  epochs: 100
+  lr: 0.0002
+  weight_decay: 0.01
+  grad_clip: 1.0
+  ema_decay: 0.9999
+  amp: true
+  log_every: 100
+  sample_every: 5
+  save_every: 10
+  sample_count: 64

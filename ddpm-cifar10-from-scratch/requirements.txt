@@ -1,0 +1,9 @@
+torch>=2.2
+torchvision>=0.17
+torchmetrics[image]>=1.4
+torch-fidelity>=0.3.0
+numpy>=1.24
+tqdm>=4.66
+Pillow>=10.0
+PyYAML>=6.0
+matplotlib>=3.8
