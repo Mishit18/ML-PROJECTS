@@ -1,0 +1,25 @@
+{
+  "base_config": "configs/t4_mistral_alpaca_qlora.json",
+  "shared_overrides": {
+    "max_steps": 400,
+    "eval_steps": 100,
+    "save_steps": 400,
+    "validation_size": 500,
+    "report_to": "none"
+  },
+  "experiments": [
+    {"name": "rank_r4", "lora_r": 4, "lora_alpha": 8},
+    {"name": "rank_r8", "lora_r": 8, "lora_alpha": 16},
+    {"name": "rank_r16", "lora_r": 16, "lora_alpha": 32},
+    {"name": "rank_r32", "lora_r": 32, "lora_alpha": 64},
+    {"name": "target_qv", "lora_target_modules": ["q_proj", "v_proj"]},
+    {"name": "target_attn", "lora_target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"]},
+    {"name": "target_all_linear", "lora_target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]},
+    {"name": "alpha_eq_r", "lora_r": 8, "lora_alpha": 8},
+    {"name": "alpha_2r", "lora_r": 8, "lora_alpha": 16},
+    {"name": "alpha_32", "lora_r": 8, "lora_alpha": 32},
+    {"name": "lr_1e-4", "learning_rate": 0.0001},
+    {"name": "lr_2e-4", "learning_rate": 0.0002},
+    {"name": "lr_5e-4", "learning_rate": 0.0005}
+  ]
+}
