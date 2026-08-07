@@ -296,14 +296,23 @@ Log during training:
 - Checkpoint FID/IS after meaningful intervals
 - Sampling speed for DDPM and DDIM
 
-## 9. Resume Bullet Templates
+## 9. Resume Bullet Drafts
 
-Fill these only after real experiments:
+Use the measured bullets below until final FID/Inception Score evaluation is
+complete.
 
-- Implemented DDPM from scratch in PyTorch, including closed-form forward noising, learned reverse denoising U-Net, cosine noise schedule, and EMA sampling; achieved FID `[X]` on CIFAR-10 with 50k generated samples.
-- Built a `[Z]`M-parameter U-Net with `[X]` residual blocks, GroupNorm/SiLU residual pathways, sinusoidal timestep conditioning, and multi-head attention at `[Y]` resolutions; trained with mixed precision on a single GPU.
-- Implemented deterministic DDIM sampling, reducing generation from 1000 denoising steps to `[S]` steps for `[X]`x inference speedup at matched sample quality, with FID delta `< [Y]`.
-- Ablated linear vs cosine schedules, EMA vs non-EMA, model size, and DDPM vs DDIM; cosine reduced FID by `[X]%` and EMA improved FID by `[Y]%` over the non-EMA baseline.
+- Implemented DDPM from scratch in PyTorch, including closed-form forward
+  noising, epsilon-prediction denoising, cosine noise scheduling, EMA
+  checkpoints, and DDIM/DDPM samplers.
+- Built a 71.03M-parameter U-Net with GroupNorm/SiLU residual blocks,
+  sinusoidal timestep conditioning, encoder-decoder skip connections, and
+  multi-head attention at 16x16 and 8x8 resolutions.
+- Trained the main CIFAR-10 run to 106,500 / 300,000 optimizer steps before GPU
+  handoff; latest logged loss was 0.058331 with checkpoint/sample artifacts
+  generated every 5 epochs.
+- Final resume metrics should add measured FID, Inception Score, sampler type,
+  denoising steps, EMA/raw weights, checkpoint, sample count, and seed after
+  evaluation completes.
 
 ## 10. Common Mistakes
 
@@ -320,3 +329,22 @@ Fill these only after real experiments:
 3. Compute FID with 10k generated samples for fast iteration.
 4. Run final FID with 50k generated samples.
 5. Run ablations and fill the resume bullets with actual measured values.
+
+## Current Training Status
+
+The main RTX 4060 run is partially trained and paused while the GPU is occupied
+by the QLoRA project. Current measured status:
+
+- Config: `configs/cifar10_rtx4060_best.yaml`
+- Model size: 71.03M parameters
+- Current logged step: 106,500 / 300,000
+- Current logged epoch: 273
+- Latest logged loss: 0.058331
+- Latest saved checkpoint: `runs/cifar10_rtx4060_best/checkpoint_0270.pt`
+- Latest sample grid: `runs/cifar10_rtx4060_best/samples/epoch_0270_ddim50.png`
+
+Documentation:
+
+- [EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) - measured status, pending metrics, resume/evaluation commands
+- [TRAINING_STATUS.md](docs/TRAINING_STATUS.md) - exact current checkpoint and completion criteria
+- [ATS_SCREENING_PACK.md](docs/ATS_SCREENING_PACK.md) - resume bullets, keywords, and claims to avoid
