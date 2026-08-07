@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+reports/prediction_log.jsonl
+reports/benchmark_*.json

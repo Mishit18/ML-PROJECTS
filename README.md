@@ -1,8 +1,26 @@
 # Machine Learning Projects Portfolio
 
-A collection of production-grade machine learning implementations built from first principles. Each project demonstrates deep understanding of core algorithms through clean, modular code and rigorous validation.
+A collection of production-grade machine learning implementations built from first principles. Each project demonstrates deep understanding of core algorithms through clean, modular code, reproducible validation, and interview-ready documentation.
 
 ## Projects Overview
+
+### 0. Real-Time Model Serving and Monitoring Pipeline
+**Directory:** `real-time-model-serving-monitoring/`
+
+A production-style MLOps project demonstrating real-time inference, model artifact versioning, request validation, prediction logging, latency telemetry, and feature-drift monitoring.
+
+**Key Features:**
+- FastAPI service with `/health`, `/predict`, `/batch_predict`, `/monitor/drift`, and `/monitor/latency`
+- Reproducible scikit-learn training pipeline with generated model artifact, metadata, baseline feature statistics, and model card
+- p50/p95 latency tracking, request logging, and PSI-based feature drift monitoring
+- Dockerfile, example payloads, and automated tests covering API and monitoring paths
+- Holdout metrics from reproducible run: Accuracy 94.7%, ROC-AUC 0.993, F1 0.958
+
+**Technologies:** FastAPI, Docker, scikit-learn, Pydantic, pytest, model monitoring
+
+**Use Cases:** MLOps, production ML, real-time inference, model monitoring, AI/ML engineer interviews
+
+---
 
 ### 1. Diffusion Models from Scratch
 **Directory:** `diffusion-models/`
@@ -14,10 +32,10 @@ A complete implementation of Denoising Diffusion Probabilistic Models (DDPM) for
 - Custom UNet architecture with attention mechanisms
 - DDPM and DDIM sampling algorithms
 - Classifier-free guidance for conditional generation
-- Trained on CIFAR-10 dataset (500 epochs)
-- FID Score: 10-15, Model Size: 35M parameters
+- Trained on CIFAR-10 dataset
+- FID reporting and ablation workflow
 
-**Technologies:** PyTorch, CIFAR-10, UNet, Attention Mechanisms
+**Technologies:** PyTorch, CIFAR-10, UNet, attention mechanisms
 
 **Use Cases:** Image generation, denoising, creative AI applications
 
@@ -31,10 +49,10 @@ A GPT-style language model implementing the complete transformer architecture fr
 **Key Features:**
 - Multi-head self-attention with causal masking
 - Pre-LayerNorm transformer blocks
-- KV cache for efficient autoregressive generation (10-15x speedup)
-- Mixed precision training (FP16/FP32)
-- Multiple sampling strategies (greedy, top-k, top-p, temperature)
-- Configurations: Small (25M), Base (117M), Medium (350M) parameters
+- KV cache for efficient autoregressive generation
+- Mixed precision training
+- Multiple sampling strategies: greedy, top-k, top-p, temperature
+- Configurations from small to medium-scale experiments
 
 **Technologies:** PyTorch, Transformers, Attention, NLP
 
@@ -49,48 +67,71 @@ A complete implementation of Proximal Policy Optimization for reinforcement lear
 
 **Key Features:**
 - Clipped surrogate objective for stable learning
-- Generalized Advantage Estimation (GAE)
+- Generalized Advantage Estimation
 - Separate actor-critic networks
 - Custom inventory management environment
-- Trained on CartPole and custom supply chain optimization
-- 71% improvement over random policy on inventory management
+- Trained on CartPole and custom supply-chain optimization
+- Current inventory result uses random-policy baseline; classical EOQ / newsvendor / `(s,S)` baselines should be added before resume use
 
 **Technologies:** PyTorch, Gymnasium, Reinforcement Learning, Policy Gradients
 
-**Use Cases:** Game AI, robotics control, operations research, RLHF
+**Use Cases:** Operations research, inventory control, RL methodology
+
+---
+
+### 4. Mistral 7B LoRA / QLoRA Fine-Tuning
+**Directory:** `mistral-7b-qlora-lora-finetuning/`
+
+Instruction fine-tuning project currently under active training. It should be used on resumes only after training completes, evaluation is reproducible, and LoRA hyperparameter ablations are documented.
+
+**Target Evidence Before Resume Use:**
+- Base vs fine-tuned evaluation
+- LoRA rank / alpha / dropout ablations
+- QLoRA memory and throughput report
+- Held-out instruction-following evaluation
+- Clear limitations around dataset quality and hallucination risk
 
 ---
 
 ## Project Structure
 
-```
+```text
 ML-PROJECTS/
-├── diffusion-models/           # DDPM image generation
-├── mini-gpt/                   # GPT-style language model
-├── ppo-reinforcement-learning/ # PPO RL implementation
-└── README.md                   # This file
+- real-time-model-serving-monitoring/ # FastAPI model serving + monitoring
+- diffusion-models/                   # DDPM image generation
+- mini-gpt/                           # GPT-style language model
+- ppo-reinforcement-learning/         # PPO RL implementation
+- mistral-7b-qlora-lora-finetuning/   # Active LoRA / QLoRA fine-tuning work
+- README.md                           # This file
 ```
 
 ## Common Characteristics
 
-All projects demonstrate:
-- **From First Principles:** No high-level abstractions, every component implemented explicitly
-- **Production Quality:** Modular design, comprehensive documentation, proper error handling
-- **Research Grade:** Mathematical rigor, proper citations, reproducible results
-- **Educational Value:** Clear code structure, detailed comments, suitable for learning
+All projects aim to demonstrate:
+- **From First Principles:** Core algorithms implemented explicitly where educational value matters
+- **Production Quality:** Modular design, documentation, error handling, and tests where appropriate
+- **Research Grade:** Clear baselines, reproducible metrics, ablations, and honest limitations
+- **Interview Readiness:** Each project should have defensible bullets, caveats, and walkthroughs
 
 ## Technologies Used
 
-- **Deep Learning Framework:** PyTorch 2.0+
-- **Python:** 3.8+
-- **Key Libraries:** NumPy, Matplotlib, TensorBoard
-- **Environments:** CUDA 11.8+ (optional, for GPU acceleration)
+- **Deep Learning:** PyTorch, Transformers, diffusion models, reinforcement learning
+- **MLOps:** FastAPI, Docker, Pydantic, pytest, model monitoring
+- **Python Stack:** NumPy, pandas, scikit-learn, matplotlib, TensorBoard where relevant
+- **Environments:** CPU-friendly tests by default; GPU required only for heavier training projects
 
 ## Getting Started
 
-Each project has its own README with detailed instructions. Navigate to the respective directory and follow the setup instructions:
+Each project has its own README with detailed instructions.
 
 ```bash
+# Real-time model serving
+cd real-time-model-serving-monitoring/
+pip install -r requirements.txt
+python scripts/train_model.py
+python -m pytest -q
+uvicorn src.ml_monitoring.app:app --host 0.0.0.0 --port 8000
+
 # Diffusion Models
 cd diffusion-models/
 pip install -r requirements.txt
@@ -107,29 +148,16 @@ pip install -r requirements.txt
 python training/train_agent.py --env CartPole-v1 --total-timesteps 50000
 ```
 
-## Project Highlights
+## Resume Use
 
-### Diffusion Models
-- Implements state-of-the-art image generation
-- Achieves competitive FID scores on CIFAR-10
-- Demonstrates understanding of probabilistic modeling
+For AI/ML Engineer resumes, prioritize:
+1. Real-Time Model Serving and Monitoring Pipeline
+2. Mini-GPT
+3. DDPM / diffusion project
+4. Mistral LoRA / QLoRA only after training and ablation results are complete
 
-### Mini-GPT
-- Complete transformer implementation without abstractions
-- Efficient inference with KV caching
-- Demonstrates understanding of attention mechanisms and language modeling
-
-### PPO
-- Stable reinforcement learning with clipped objective
-- Custom environment design (inventory management)
-- Demonstrates understanding of policy gradient methods
+FlowFinance production AI work should be listed as venture / founder experience, not as a project.
 
 ## License
 
-Each project is individually licensed. See the respective `license.txt` files in each project directory.
-
-Copyright (c) 2026. All Rights Reserved.
-
----
-
-**Note:** These implementations prioritize clarity and correctness over performance optimization, making them suitable for educational purposes, research, and as foundations for production systems.
+Each project is individually licensed. See the respective license files in each project directory.
