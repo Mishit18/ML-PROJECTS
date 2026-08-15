@@ -5,13 +5,16 @@ from torch.utils.data import DataLoader
 
 
 def make_cifar10_loader(data_dir: str, batch_size: int, num_workers: int, train: bool = True) -> DataLoader:
-    transform = transforms.Compose(
+    transform_steps = []
+    if train:
+        transform_steps.append(transforms.RandomHorizontalFlip())
+    transform_steps.extend(
         [
-            transforms.RandomHorizontalFlip() if train else transforms.Lambda(lambda x: x),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ]
     )
+    transform = transforms.Compose(transform_steps)
     extracted = Path(data_dir) / "cifar-10-batches-py"
     dataset = datasets.CIFAR10(data_dir, train=train, transform=transform, download=not extracted.exists())
     return DataLoader(

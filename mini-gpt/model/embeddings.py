@@ -134,6 +134,7 @@ class TransformerEmbedding(nn.Module):
         max_seq_len: int,
         dropout: float = 0.1,
         use_sinusoidal: bool = False,
+        use_positional_embeddings: bool = True,
     ):
         """
         Args:
@@ -146,11 +147,15 @@ class TransformerEmbedding(nn.Module):
         super().__init__()
         
         self.token_embedding = TokenEmbedding(vocab_size, d_model)
+        self.use_positional_embeddings = use_positional_embeddings
         
-        if use_sinusoidal:
-            self.pos_embedding = SinusoidalPositionalEmbedding(d_model, max_seq_len)
+        if use_positional_embeddings:
+            if use_sinusoidal:
+                self.pos_embedding = SinusoidalPositionalEmbedding(d_model, max_seq_len)
+            else:
+                self.pos_embedding = PositionalEmbedding(max_seq_len, d_model)
         else:
-            self.pos_embedding = PositionalEmbedding(max_seq_len, d_model)
+            self.pos_embedding = None
         
         self.dropout = nn.Dropout(dropout)
         self.d_model = d_model
@@ -165,8 +170,10 @@ class TransformerEmbedding(nn.Module):
             Combined embeddings of shape (B, T, d_model)
         """
         token_emb = self.token_embedding(token_ids)
-        pos_emb = self.pos_embedding(token_ids, start_pos)
-        embeddings = token_emb + pos_emb
+        embeddings = token_emb
+        if self.pos_embedding is not None:
+            pos_emb = self.pos_embedding(token_ids, start_pos)
+            embeddings = embeddings + pos_emb
         embeddings = self.dropout(embeddings)
         
         return embeddings

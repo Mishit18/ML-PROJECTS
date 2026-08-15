@@ -1,0 +1,22 @@
+[
+  {
+    "prompt": "### Instruction:\nExplain LoRA fine-tuning to a second-year engineering student using one equation and one intuition.\n\n### Response:\n",
+    "completion": "#### Equation:\n\n$$\n\\text{LoRA} = \\text{Fine-tuning} + \\text{Prompt Engineering}\n$$\n\n#### Intuition:\n\nLoRA is a technique that combines fine-tuning and prompt engineering to improve the performance of large language models. Fine-tuning involves training a model on a specific task, while prompt engineering involves using prompts to guide the model's behavior."
+  },
+  {
+    "prompt": "### Instruction:\nGive a concise checklist for debugging CUDA out-of-memory during QLoRA training.\n\n### Response:\n",
+    "completion": "1. Check the memory usage of the GPU.\n\n   ```\n   nvidia-smi\n   ```\n\n2. Check the memory usage of the process.\n\n   ```\n   ps -aux | grep python\n   ```\n\n3. Check the memory usage of the process.\n\n   ```\n   top\n   ```\n\n4. Check the memory usage of the process.\n\n   ```\n   htop"
+  },
+  {
+    "prompt": "### Instruction:\nCompare LoRA rank 4, 8, and 16 for a 7B model. Mention parameter count and overfitting tradeoffs.\n\n### Response:\n",
+    "completion": "I compared the LoRA rank 4, 8, and 16 for a 7B model. The parameter count for LoRA rank 4 is 1.1B, for LoRA rank 8 is 2.2B, and for LoRA rank 16 is 4.4B. The overfitting tradeoffs for LoRA rank 4 is 1.1B, for LoRA rank 8 is 2"
+  },
+  {
+    "prompt": "### Instruction:\nWrite three resume bullets for a project that fine-tuned Mistral 7B with QLoRA on Alpaca.\n\n### Response:\n",
+    "completion": "1. Fine-tuned Mistral 7B with QLoRA on Alpaca to improve the model's ability to generate high-quality, human-like text.\n\n2. Implemented a new training strategy that involved fine-tuning the model on a large dataset of human-generated text, which resulted in a significant improvement in the model's performance.\n\n3. Conducted extensive experiments to evaluate the model's performance"
+  },
+  {
+    "prompt": "### Instruction:\nA model's train loss decreases but validation perplexity increases. Diagnose the likely issue and suggest two fixes.\n\n### Response:\n",
+    "completion": "The model's train loss decreasing but validation perplexity increasing is a common issue in machine learning, and it can be caused by several factors. Here are some possible causes and fixes:\n\n1. **Overfitting:** The model is learning the training data too well and is not generalizing to the validation data. This can be fixed by regularization techniques such as dropout, weight decay, or early stopping.\n\n2. **Data im"
+  }
+]

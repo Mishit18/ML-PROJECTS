@@ -93,6 +93,26 @@ Instruction fine-tuning project currently under active training. It should be us
 
 ---
 
+### 5. Credit Risk and Customer Lifecycle Analytics
+**Directory:** `credit-risk-customer-lifecycle-analytics/`
+
+End-to-end fintech data science project for credit risk, banking analytics, customer lifecycle, scorecards, and portfolio monitoring roles.
+
+**Key Features:**
+- Synthetic but realistic 25,000-customer banking portfolio with bureau, repayment, utilization, acquisition, churn, and margin signals
+- Temporal validation by customer vintage month to avoid random-split leakage
+- Model comparison across logistic scorecard, gradient boosting, and random forest
+- ROC-AUC 0.763, KS 0.405, and 34.5% recall in the riskiest decile from the synthetic lifecycle pipeline
+- Real OpenML German Credit benchmark: ROC-AUC 0.801 and KS 0.494 on 1,000 public records
+- DuckDB SQL analytics layer for approval policy, realized default, churn, segment profitability, and acquisition-channel quality
+- Permutation explainability, PSI drift monitoring, model card, executive brief, plots, and tests
+
+**Technologies:** Python, pandas, scikit-learn, DuckDB, matplotlib, pytest
+
+**Use Cases:** Credit risk, fintech analytics, data scientist, product analytics, banking DS, model governance
+
+---
+
 ## Project Structure
 
 ```text
@@ -102,6 +122,7 @@ ML-PROJECTS/
 - mini-gpt/                           # GPT-style language model
 - ppo-reinforcement-learning/         # PPO RL implementation
 - mistral-7b-qlora-lora-finetuning/   # Active LoRA / QLoRA fine-tuning work
+- credit-risk-customer-lifecycle-analytics/ # Credit risk + customer lifecycle analytics
 - README.md                           # This file
 ```
 
@@ -157,6 +178,12 @@ For AI/ML Engineer resumes, prioritize:
 4. Mistral LoRA / QLoRA only after training and ablation results are complete
 
 FlowFinance production AI work should be listed as venture / founder experience, not as a project.
+
+For Data Scientist / fintech analytics resumes, prioritize:
+1. Credit Risk and Customer Lifecycle Analytics
+2. SQL Operations Analytics
+3. Demand Forecasting + Safety Stock
+4. A/B Testing and Funnel Analytics
 
 ## License
 

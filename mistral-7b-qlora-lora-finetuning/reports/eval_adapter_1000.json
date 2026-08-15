@@ -1,0 +1,7 @@
+{
+  "perplexity": {
+    "eval_loss": 0.9628100568279624,
+    "perplexity": 2.619045810121591,
+    "num_eval_samples": 1000
+  }
+}

@@ -4,6 +4,14 @@ Production-style ML serving project focused on the parts interviewers ask for mo
 
 This project is intentionally lightweight and reproducible on a laptop. The model is a scikit-learn breast-cancer risk classifier trained from a built-in dataset so the serving, monitoring, and testing workflow can be verified without private data or GPU access.
 
+## Tech Resume Screening Summary
+
+Verified locally:
+- Pytest suite passes 11/11 tests covering API endpoints, model loading, monitoring, drift checks, and governance utilities.
+- Versioned RandomForest model reaches 94.74% accuracy, 99.34% ROC-AUC, and 95.83% F1 on the held-out test split.
+- Governance readiness report records p50 latency 9.10 ms, p95 latency 11.06 ms, severe PSI drift detection, and safe shadow-model agreement.
+- Project demonstrates model serving, MLOps monitoring, request validation, model-card governance, Docker packaging, and production-style API design.
+
 ## Why This Project Exists
 
 Most ML portfolio projects stop at model accuracy. This project demonstrates the next layer:

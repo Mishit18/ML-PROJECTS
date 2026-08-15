@@ -34,6 +34,7 @@ class FeedForward(nn.Module):
         d_ff: int,
         dropout: float = 0.1,
         bias: bool = True,
+        activation: str = "swiglu",
     ):
         """
         Args:
@@ -44,7 +45,11 @@ class FeedForward(nn.Module):
         """
         super().__init__()
         
-        self.fc1 = nn.Linear(d_model, d_ff, bias=bias)
+        self.activation_name = activation
+        if activation == "swiglu":
+            self.fc1 = nn.Linear(d_model, 2 * d_ff, bias=bias)
+        else:
+            self.fc1 = nn.Linear(d_model, d_ff, bias=bias)
         self.fc2 = nn.Linear(d_ff, d_model, bias=bias)
         self.dropout = nn.Dropout(dropout)
         
@@ -61,7 +66,11 @@ class FeedForward(nn.Module):
             Output of shape (B, T, d_model)
         """
         x = self.fc1(x)
-        x = self.activation(x)
+        if self.activation_name == "swiglu":
+            gate, value = x.chunk(2, dim=-1)
+            x = nn.functional.silu(gate) * value
+        else:
+            x = self.activation(x)
         x = self.dropout(x)
         
         x = self.fc2(x)
@@ -88,6 +97,12 @@ class TransformerBlock(nn.Module):
         d_ff: int,
         dropout: float = 0.1,
         bias: bool = True,
+        norm_type: str = "rmsnorm",
+        num_kv_heads: Optional[int] = None,
+        use_flash_attention: bool = True,
+        use_rope: bool = False,
+        max_seq_len: int = 1024,
+        ffn_activation: str = "swiglu",
     ):
         """
         Args:
@@ -99,9 +114,9 @@ class TransformerBlock(nn.Module):
         """
         super().__init__()
         
-        # Layer normalization (Pre-LN)
-        self.ln1 = nn.LayerNorm(d_model)
-        self.ln2 = nn.LayerNorm(d_model)
+        norm_cls = RMSNorm if norm_type == "rmsnorm" else nn.LayerNorm
+        self.ln1 = norm_cls(d_model)
+        self.ln2 = norm_cls(d_model)
         
         # Multi-head self-attention
         self.attention = CausalSelfAttention(
@@ -109,6 +124,10 @@ class TransformerBlock(nn.Module):
             num_heads=num_heads,
             dropout=dropout,
             bias=bias,
+            num_kv_heads=num_kv_heads,
+            use_flash_attention=use_flash_attention,
+            use_rope=use_rope,
+            max_seq_len=max_seq_len,
         )
         
         # Feed-forward network
@@ -117,6 +136,7 @@ class TransformerBlock(nn.Module):
             d_ff=d_ff,
             dropout=dropout,
             bias=bias,
+            activation=ffn_activation,
         )
     
     def forward(
@@ -125,6 +145,7 @@ class TransformerBlock(nn.Module):
         attention_mask: Optional[torch.Tensor] = None,
         kv_cache: Optional[Tuple[torch.Tensor, torch.Tensor]] = None,
         use_cache: bool = False,
+        start_pos: int = 0,
     ) -> Tuple[torch.Tensor, Optional[Tuple[torch.Tensor, torch.Tensor]]]:
         """
         Forward pass through transformer block.
@@ -146,6 +167,7 @@ class TransformerBlock(nn.Module):
             attention_mask=attention_mask,
             kv_cache=kv_cache,
             use_cache=use_cache,
+            start_pos=start_pos,
         )
         
         x = x + attn_output
@@ -155,3 +177,16 @@ class TransformerBlock(nn.Module):
         x = x + ffn_output
         
         return x, new_kv_cache
+
+
+class RMSNorm(nn.Module):
+    """Root-mean-square normalization used in LLaMA/Mistral-style blocks."""
+
+    def __init__(self, d_model: int, eps: float = 1e-6):
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(d_model))
+        self.eps = eps
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        variance = x.pow(2).mean(dim=-1, keepdim=True)
+        return self.weight * x * torch.rsqrt(variance + self.eps)

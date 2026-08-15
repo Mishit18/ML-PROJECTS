@@ -11,8 +11,14 @@ model:
   dropout: 0.1
   bias: true
   use_sinusoidal_pos: false
+  position_embedding_type: rope
+  norm_type: rmsnorm
+  num_kv_heads: 4
+  use_flash_attention: true
+  ffn_activation: swiglu
 
 data:
+  dataset_name: wikitext-2
   num_train: 50000
   num_val: 5000
 
@@ -29,4 +35,6 @@ training:
   log_interval: 50
   eval_interval: 500
   save_interval: 1000
-  checkpoint_dir: checkpoints
+  checkpoint_dir: checkpoints/large_wikitext2
+  experiment_dir: experiments
+  run_name: large_wikitext2

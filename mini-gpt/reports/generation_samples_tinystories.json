@@ -1,0 +1,29 @@
+{
+  "checkpoint": "checkpoints\\small_tinystories_20m\\checkpoint_epoch_15.pt",
+  "samples": [
+    {
+      "prompt": "Once upon a time",
+      "completion": "Once upon a time, there was a little boy named Timmy. Timmy liked to play with his toy cars and trucks. One day, Timmy's mom told him they were going to a hospital. Timmy didn't want to take a bath because he was scared he could leave his room.\n\nAs they walked along the kitchen, Timmy saw a big tree. He wanted to climb the table but",
+      "max_new_tokens": 80,
+      "temperature": 0.8,
+      "top_k": 50,
+      "top_p": 0.95
+    },
+    {
+      "prompt": "Lily found a small",
+      "completion": "Lily found a small box in her room. It was shiny and had a shiny bow. She liked to put it on her shirt and pretend to be a real person. She loved her dress and wanted to use it to take it.\n\nOne day, Lily went to the kitchen. She saw her friend Tommy on the table. He wanted to pick a cup of tea. He said, \"Let's paint the",
+      "max_new_tokens": 80,
+      "temperature": 0.8,
+      "top_k": 50,
+      "top_p": 0.95
+    },
+    {
+      "prompt": "Tom wanted to help",
+      "completion": "Tom wanted to help his mom in the kitchen. He ran to the kitchen and put some delicious vegetables in the oven. He put some oven in a oven and put some cheese in it. He put some clothes in the oven and put it on the oven.\n\nHe started to draw a sandwich. He put a bowl in the oven and mixed it up. He put some sugar on the oven and some sugar on",
+      "max_new_tokens": 80,
+      "temperature": 0.8,
+      "top_k": 50,
+      "top_p": 0.95
+    }
+  ]
+}

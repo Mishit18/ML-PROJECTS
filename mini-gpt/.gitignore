@@ -54,7 +54,6 @@ wandb/
 
 # Experiments and outputs
 experiments/
-tests/
 
 # Documentation (keep only README)
 docs/

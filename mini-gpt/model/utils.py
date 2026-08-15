@@ -33,17 +33,16 @@ def initialize_weights(model: nn.Module, init_std: float = 0.02):
         model: PyTorch model
         init_std: Standard deviation for normal initialization
     """
-    for name, param in model.named_parameters():
-        if 'weight' in name:
-            if 'ln' in name or 'layernorm' in name:
-                # LayerNorm weights initialized to 1
-                nn.init.ones_(param)
-            else:
-                # Linear layer weights
-                nn.init.normal_(param, mean=0.0, std=init_std)
-        elif 'bias' in name:
-            # All biases initialized to 0
-            nn.init.zeros_(param)
+    if isinstance(model, (nn.Linear, nn.Embedding)):
+        nn.init.normal_(model.weight, mean=0.0, std=init_std)
+        if getattr(model, "bias", None) is not None:
+            nn.init.zeros_(model.bias)
+    elif isinstance(model, nn.LayerNorm):
+        nn.init.ones_(model.weight)
+        if model.bias is not None:
+            nn.init.zeros_(model.bias)
+    elif model.__class__.__name__ == "RMSNorm":
+        nn.init.ones_(model.weight)
 
 
 def get_lr_scheduler_lambda(

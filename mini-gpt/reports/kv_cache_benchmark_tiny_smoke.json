@@ -1,0 +1,79 @@
+{
+  "device": "cuda",
+  "cuda_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "checkpoint": "checkpoints\\tiny_smoke\\model_final.pt",
+  "config": {
+    "vocab_size": 50257,
+    "max_seq_len": 320,
+    "d_model": 64,
+    "num_layers": 2,
+    "num_heads": 4,
+    "d_ff": 128,
+    "dropout": 0.0,
+    "bias": true,
+    "use_sinusoidal_pos": false,
+    "position_embedding_type": "rope",
+    "norm_type": "rmsnorm",
+    "num_kv_heads": 2,
+    "use_flash_attention": true,
+    "ffn_activation": "swiglu"
+  },
+  "results": [
+    {
+      "generated_tokens": 32,
+      "no_cache": {
+        "seconds_p50": 0.08379640000021027,
+        "seconds_p95": 0.08379640000021027,
+        "tokens_per_sec_p50": 381.8779804373422
+      },
+      "kv_cache": {
+        "seconds_p50": 0.10152349999953003,
+        "seconds_p95": 0.10152349999953003,
+        "tokens_per_sec_p50": 315.197959094674
+      },
+      "speedup_p50": 0.8253891956108504
+    },
+    {
+      "generated_tokens": 64,
+      "no_cache": {
+        "seconds_p50": 0.18517090000023018,
+        "seconds_p95": 0.18517090000023018,
+        "tokens_per_sec_p50": 345.6266616402493
+      },
+      "kv_cache": {
+        "seconds_p50": 0.19299669999963953,
+        "seconds_p95": 0.19299669999963953,
+        "tokens_per_sec_p50": 331.6118876650198
+      },
+      "speedup_p50": 0.9594511201516711
+    },
+    {
+      "generated_tokens": 128,
+      "no_cache": {
+        "seconds_p50": 0.36228879999907804,
+        "seconds_p95": 0.36228879999907804,
+        "tokens_per_sec_p50": 353.30929358104845
+      },
+      "kv_cache": {
+        "seconds_p50": 0.36718029999974533,
+        "seconds_p95": 0.36718029999974533,
+        "tokens_per_sec_p50": 348.6025802584964
+      },
+      "speedup_p50": 0.9866782068627574
+    },
+    {
+      "generated_tokens": 256,
+      "no_cache": {
+        "seconds_p50": 0.7809129999986908,
+        "seconds_p95": 0.7809129999986908,
+        "tokens_per_sec_p50": 327.8214090435544
+      },
+      "kv_cache": {
+        "seconds_p50": 0.6947980000004463,
+        "seconds_p95": 0.6947980000004463,
+        "tokens_per_sec_p50": 368.4524135069985
+      },
+      "speedup_p50": 1.1239424983926107
+    }
+  ]
+}

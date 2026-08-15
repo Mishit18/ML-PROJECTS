@@ -1,6 +1,6 @@
 # Training Status
 
-Last checked: 2026-08-08 03:05 IST.
+Last checked: 2026-08-08 04:10 IST.
 
 ## Active Run
 
@@ -16,13 +16,13 @@ Last checked: 2026-08-08 03:05 IST.
 | Config | `configs/t4_mistral_alpaca_qlora.json` |
 | Output dir | `outputs/mistral7b-alpaca-cleaned-qlora-r8` |
 | Target steps | 1,200 |
-| Latest observed checkpoint | `checkpoint-900` |
-| Active process | resumed from `checkpoint-600` |
-| Latest observed progress | around 978 / 1,200 steps from stderr tail |
-| Latest observed eval loss | 0.964837 during resumed run |
-| Verification | `python -m pytest -q` passed, 2 tests |
+| Latest observed checkpoint | `checkpoint-1200` |
+| Active process | completed 1,200 / 1,200 steps |
+| Latest observed progress | final checkpoint saved |
+| Latest observed eval loss | 0.962782 at step 1,200 |
+| Verification | `python -m pytest -q` passed, 2 tests; base/adapted held-out eval completed |
 
-## Active Command
+## Completed Training Command
 
 ```powershell
 D:\venvs\qlora-ft2\Scripts\python.exe -u -m src.train --config configs/t4_mistral_alpaca_qlora.json --resume-from-checkpoint outputs/mistral7b-alpaca-cleaned-qlora-r8/checkpoint-600
@@ -30,18 +30,46 @@ D:\venvs\qlora-ft2\Scripts\python.exe -u -m src.train --config configs/t4_mistra
 
 ## Completion Criteria
 
-- Let training reach 1,200 steps without interrupting the process.
-- Run held-out perplexity evaluation on the final adapter.
+- Training reached 1,200 steps and saved final adapter/checkpoint.
+- Held-out evaluation completed on the same 1,000-sample split for base and adapter.
 - Run at least 10 fixed qualitative prompts and save base-vs-adapter examples.
 - Record peak VRAM from `nvidia-smi`.
 - Update resume bullets with final measured metrics only.
 
+## Held-Out Base vs Adapter Evaluation
+
+| Model | Eval Loss | Perplexity | Eval Samples |
+|---|---:|---:|---:|
+| Base Mistral-7B-v0.3 | 1.602915 | 4.9675 | 1,000 |
+| Rank-8 QLoRA adapter | 0.962810 | 2.6190 | 1,000 |
+
+The final adapter reduced held-out perplexity by 47.27% versus the frozen base model under the same evaluation script and sample count.
+
+## Evaluation Loss Curve
+
+| Step | Eval Loss |
+|---:|---:|
+| 100 | 1.014257 |
+| 200 | 0.996753 |
+| 300 | 0.988627 |
+| 400 | 0.983328 |
+| 500 | 0.977995 |
+| 600 | 0.974084 |
+| 700 | 0.969701 |
+| 800 | 0.967229 |
+| 900 | 0.964837 |
+| 1000 | 0.963409 |
+| 1100 | 0.962931 |
+| 1200 | 0.962782 |
+
+Relative improvement from the first logged evaluation to the final logged evaluation: 5.07%.
+
 ## Final Evaluation Command
 
 ```powershell
-python -m src.evaluate `
+D:\venvs\qlora-ft2\Scripts\python.exe -u -m src.evaluate `
   --config configs/t4_mistral_alpaca_qlora.json `
   --adapter-dir outputs/mistral7b-alpaca-cleaned-qlora-r8 `
-  --max-eval-samples 500 `
-  --output reports/eval_adapter.json
+  --max-eval-samples 1000 `
+  --output reports/eval_adapter_1000.json
 ```

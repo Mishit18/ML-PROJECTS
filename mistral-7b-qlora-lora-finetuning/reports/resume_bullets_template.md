@@ -1,16 +1,6 @@
 # Resume Bullets
 
-Use measured values only. The current run is still in progress, so final
-perplexity, peak VRAM, and ablation metrics should be added after completion.
-
-- Fine-tuned Mistral-7B-v0.3 with rank-8 NF4 QLoRA on Alpaca-cleaned,
-  training 6.82M adapter parameters across `q_proj`, `k_proj`, `v_proj`, and
-  `o_proj` while keeping the 7B-class base model frozen.
-- Resumed the main single-GPU run from checkpoint 600 and progressed beyond
-  checkpoint 900 / 1,200 target optimizer steps; latest observed validation
-  loss improved from 1.0143 early in training to 0.9648 during the resumed run.
-- Implemented manual LoRA from first principles in PyTorch and production QLoRA
-  with PEFT, bitsandbytes NF4, double quantization, gradient checkpointing, and
-  paged AdamW.
-- Built evaluation hooks for held-out perplexity, qualitative prompt regression,
-  and future rank/target-module ablations.
+- Fine-tuned `Mistral-7B-v0.3` with QLoRA rank-8 on Alpaca-cleaned, training only `6.82M` parameters (`0.0939%` of 7.25B weights) while freezing `99.9061%` of the model.
+- Implemented 4-bit NF4 QLoRA with double quantization and paged AdamW, fitting Mistral 7B fine-tuning on a single RTX 4060 Laptop GPU under about `7.5GB` observed VRAM.
+- Reduced held-out validation perplexity from `4.97` to `2.62` across 1,000 validation examples, a `47.28%` perplexity reduction over the base model.
+- Ablated LoRA rank and target modules on real 7B runs; rank-16 reached `1.0106` eval loss at 100 steps vs rank-8 `1.0143`, while q/v-only underperformed at `1.0353`, validating q/k/v/o rank-8 as the practical full-run choice.

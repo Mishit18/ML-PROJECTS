@@ -1,0 +1,63 @@
+{
+  "device": "cuda",
+  "cuda_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "checkpoint": "checkpoints\\tiny_smoke\\model_final.pt",
+  "config": {
+    "vocab_size": 50257,
+    "max_seq_len": 320,
+    "d_model": 64,
+    "num_layers": 2,
+    "num_heads": 4,
+    "d_ff": 128,
+    "dropout": 0.0,
+    "bias": true,
+    "use_sinusoidal_pos": false,
+    "position_embedding_type": "rope",
+    "norm_type": "rmsnorm",
+    "num_kv_heads": 2,
+    "use_flash_attention": true,
+    "ffn_activation": "swiglu"
+  },
+  "results": [
+    {
+      "batch_size": 1,
+      "use_cache": false,
+      "generated_tokens": 32,
+      "tokens_per_sec_p50": 278.9692087712136,
+      "latency_seconds_p50": 0.1147080000009737,
+      "latency_seconds_p95": 0.1147080000009737,
+      "peak_gpu_memory_mb": 35.1591796875,
+      "estimated_kv_cache_mb": 0.017578125
+    },
+    {
+      "batch_size": 1,
+      "use_cache": true,
+      "generated_tokens": 32,
+      "tokens_per_sec_p50": 228.04220775991868,
+      "latency_seconds_p50": 0.14032490000136022,
+      "latency_seconds_p95": 0.14032490000136022,
+      "peak_gpu_memory_mb": 22.92919921875,
+      "estimated_kv_cache_mb": 0.017578125
+    },
+    {
+      "batch_size": 2,
+      "use_cache": false,
+      "generated_tokens": 32,
+      "tokens_per_sec_p50": 622.7874017918116,
+      "latency_seconds_p50": 0.10276379999959318,
+      "latency_seconds_p95": 0.10276379999959318,
+      "peak_gpu_memory_mb": 49.5517578125,
+      "estimated_kv_cache_mb": 0.03515625
+    },
+    {
+      "batch_size": 2,
+      "use_cache": true,
+      "generated_tokens": 32,
+      "tokens_per_sec_p50": 543.4598009553836,
+      "latency_seconds_p50": 0.117764000000534,
+      "latency_seconds_p95": 0.117764000000534,
+      "peak_gpu_memory_mb": 24.28173828125,
+      "estimated_kv_cache_mb": 0.03515625
+    }
+  ]
+}

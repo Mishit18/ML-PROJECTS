@@ -2,6 +2,30 @@
 
 This project is a resume-grade, reproducible LoRA and QLoRA fine-tuning setup for a single GPU. It is designed for a first credible run on Colab T4 and stronger ablations on A100.
 
+## Final Results
+
+The completed run fine-tuned `mistralai/Mistral-7B-v0.3` with QLoRA rank 8 on `yahma/alpaca-cleaned` for 1,200 steps on a single RTX 4060 Laptop GPU with 8GB VRAM.
+
+| Metric | Result |
+|---|---:|
+| Trainable parameters | `6,815,744` |
+| Trainable fraction | `0.0939%` |
+| Base validation perplexity | `4.9675` |
+| Fine-tuned validation perplexity | `2.6190` |
+| Perplexity reduction | `47.28%` |
+| Final eval loss | `0.9628` |
+
+See the full write-up in `reports/FINAL_REPORT.md`.
+
+## Tech Resume Screening Summary
+
+Verified locally:
+- Pytest suite passes 2/2 tests for the manual LoRA implementation.
+- Final 1,200-step QLoRA run trained 6,815,744 adapter parameters, only 0.0939% of the 7.25B-class base model.
+- Held-out validation perplexity improved from 4.9675 to 2.6190 across 1,000 validation samples, a 47.28% reduction.
+- Real 7B ablations compare rank-4, rank-8, rank-16, and q/v-only target modules at 100 steps.
+- Project is strongest as a PEFT systems and evaluation project, not as a claim of production-safe LLM deployment.
+
 ## Recommendation
 
 Use `mistralai/Mistral-7B-v0.3` with QLoRA on `yahma/alpaca-cleaned` for the first run.

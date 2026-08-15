@@ -32,7 +32,9 @@ def load_model(checkpoint_path: str, device: torch.device):
     
     checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
     
-    if 'config' in checkpoint:
+    if 'full_config' in checkpoint:
+        model_config_dict = checkpoint['full_config'].get('model', {})
+    elif 'config' in checkpoint and 'model' in checkpoint['config']:
         model_config_dict = checkpoint['config'].get('model', {})
     else:
         model_config_dict = {

@@ -1,0 +1,39 @@
+# Tiny config for CPU smoke tests and benchmark script validation.
+
+model:
+  vocab_size: 50257
+  max_seq_len: 320
+  d_model: 64
+  num_layers: 2
+  num_heads: 4
+  d_ff: 128
+  dropout: 0.0
+  bias: true
+  use_sinusoidal_pos: false
+  position_embedding_type: rope
+  norm_type: rmsnorm
+  num_kv_heads: 2
+  use_flash_attention: true
+  ffn_activation: swiglu
+
+data:
+  dataset_name: wikitext-2
+  num_train: 64
+  num_val: 16
+
+training:
+  num_epochs: 1
+  batch_size: 2
+  grad_accum_steps: 1
+  learning_rate: 3.0e-4
+  weight_decay: 0.1
+  warmup_ratio: 0.1
+  min_lr_ratio: 0.1
+  max_grad_norm: 1.0
+  use_amp: false
+  log_interval: 5
+  eval_interval: 10
+  save_interval: 100
+  checkpoint_dir: checkpoints/tiny_smoke
+  experiment_dir: experiments
+  run_name: tiny_smoke

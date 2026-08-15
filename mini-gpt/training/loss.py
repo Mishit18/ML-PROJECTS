@@ -106,9 +106,10 @@ class LabelSmoothingLoss(nn.Module):
         log_probs = F.log_softmax(logits, dim=-1)
         
         with torch.no_grad():
+            safe_labels = labels.clamp_min(0)
             true_dist = torch.zeros_like(log_probs)
             true_dist.fill_(self.smoothing / (self.vocab_size - 1))
-            true_dist.scatter_(1, labels.unsqueeze(1), self.confidence)
+            true_dist.scatter_(1, safe_labels.unsqueeze(1), self.confidence)
             
             mask = (labels != self.ignore_index).unsqueeze(1)
             true_dist = true_dist * mask

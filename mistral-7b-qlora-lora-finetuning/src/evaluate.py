@@ -6,9 +6,9 @@ import math
 from pathlib import Path
 
 import torch
+from torch.utils.data import DataLoader
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, DataCollatorForLanguageModeling
-from transformers.trainer import Trainer
 
 from src.config import load_config
 from src.data import load_and_format_dataset, tokenize_for_lm
@@ -40,12 +40,19 @@ def compute_perplexity(config_path: str, adapter_dir: str | None, max_eval_sampl
     if max_eval_samples:
         tokenized = tokenized.select(range(min(max_eval_samples, len(tokenized))))
 
-    trainer = Trainer(
-        model=model,
-        data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
+    dataloader = DataLoader(
+        tokenized,
+        batch_size=config.per_device_eval_batch_size,
+        collate_fn=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
     )
-    metrics = trainer.evaluate(eval_dataset=tokenized)
-    loss = metrics["eval_loss"]
+    losses: list[float] = []
+    for batch in dataloader:
+        batch = {key: value.to(model.device) for key, value in batch.items()}
+        with torch.inference_mode():
+            outputs = model(**batch)
+        losses.append(float(outputs.loss.detach().cpu()))
+
+    loss = sum(losses) / len(losses)
     return {
         "eval_loss": loss,
         "perplexity": math.exp(loss) if loss < 20 else float("inf"),

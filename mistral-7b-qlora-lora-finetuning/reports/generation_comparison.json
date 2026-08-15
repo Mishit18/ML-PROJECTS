@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "prompt": "### Instruction:\nExplain LoRA fine-tuning to a second-year engineering student using one equation and one intuition.\n\n### Response:\n",
+    "base_completion": "#### Equation:\n\n$$\n\\text{LoRA} = \\text{Fine-tuning} + \\text{Prompt Engineering}\n$$\n\n#### Intuition:\n\nLoRA is a technique that combines fine-tuning and prompt engineering to improve the performance of large language models. Fine-tuning involves training a model on a specific task, while prompt engineering involves using prompts to guide the model's behavior.",
+    "adapter_completion": "LoRA fine-tuning is a technique used to fine-tune a pre-trained language model for a specific task. It involves adding a small number of additional parameters to the pre-trained model, which are then trained on the task-specific data.\n\nOne equation that can be used to describe LoRA fine-tuning is the following:\n\n`L = L_pre + L_task`\n\nwhere `L` is the total loss"
+  },
+  {
+    "id": 2,
+    "prompt": "### Instruction:\nGive a concise checklist for debugging CUDA out-of-memory during QLoRA training.\n\n### Response:\n",
+    "base_completion": "1. Check the memory usage of the GPU.\n\n   ```\n   nvidia-smi\n   ```\n\n2. Check the memory usage of the process.\n\n   ```\n   ps -aux | grep python\n   ```\n\n3. Check the memory usage of the process.\n\n   ```\n   top\n   ```\n\n4. Check the memory usage of the process.\n\n   ```\n   htop",
+    "adapter_completion": "1. Check the amount of available GPU memory: Use the `nvidia-smi` command to check the amount of available GPU memory.\n2. Check the amount of allocated memory: Use the `cuda-memcheck` command to check the amount of allocated memory during training.\n3. Check the batch size: Reduce the batch size if the allocated memory is too large.\n4. Check the model size: Reduce the model size if it"
+  },
+  {
+    "id": 3,
+    "prompt": "### Instruction:\nCompare LoRA rank 4, 8, and 16 for a 7B model. Mention parameter count and overfitting tradeoffs.\n\n### Response:\n",
+    "base_completion": "I compared the LoRA rank 4, 8, and 16 for a 7B model. The parameter count for LoRA rank 4 is 1.1B, for LoRA rank 8 is 2.2B, and for LoRA rank 16 is 4.4B. The overfitting tradeoffs for LoRA rank 4 is 1.1B, for LoRA rank 8 is 2",
+    "adapter_completion": "LoRA (Low-Rank Adaptation) is a technique used to fine-tune a pre-trained language model by adding a low-rank matrix to the model's parameters. The rank of the matrix is a hyperparameter that controls the amount of fine-tuning. Higher rank means more fine-tuning, and lower rank means less fine-tuning.\n\nFor a 7B model, the rank 4, 8, and"
+  },
+  {
+    "id": 4,
+    "prompt": "### Instruction:\nWrite three resume bullets for a project that fine-tuned Mistral 7B with QLoRA on Alpaca.\n\n### Response:\n",
+    "base_completion": "1. Fine-tuned Mistral 7B with QLoRA on Alpaca to improve the model's ability to generate high-quality, human-like text.\n\n2. Implemented a new training strategy that involved fine-tuning the model on a large dataset of human-generated text, which resulted in a significant improvement in the model's performance.\n\n3. Conducted extensive experiments to evaluate the model's performance",
+    "adapter_completion": "1. Developed a cutting-edge project to fine-tune the Mistral 7B language model with QLoRA on Alpaca, resulting in improved performance and enhanced language generation capabilities.\n2. Collaborated with a team of data scientists and AI researchers to design and implement a custom fine-tuning process, utilizing the latest techniques in natural language processing.\n3. Conducted extensive testing and evaluation of the fine-tuned model,"
+  },
+  {
+    "id": 5,
+    "prompt": "### Instruction:\nA model's train loss decreases but validation perplexity increases. Diagnose the likely issue and suggest two fixes.\n\n### Response:\n",
+    "base_completion": "The model's train loss decreasing but validation perplexity increasing is a common issue in machine learning, and it can be caused by several factors. Here are some possible causes and fixes:\n\n1. **Overfitting:** The model is learning the training data too well and is not generalizing to the validation data. This can be fixed by regularization techniques such as dropout, weight decay, or early stopping.\n\n2. **Data im",
+    "adapter_completion": "The likely issue is that the model is overfitting to the training data. This can happen when the model is too complex for the data, or when the training data is not representative of the validation data.\n\nTo fix this issue, there are two possible solutions:\n\n1. Regularization: One way to prevent overfitting is to use regularization techniques such as L1 or L2 regularization, dropout, or early stopping. These techniques help the"
+  }
+]

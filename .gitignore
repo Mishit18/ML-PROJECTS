@@ -1,0 +1,28 @@
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local datasets, model artifacts, and generated training outputs
+data/
+downloads/
+artifacts/
+outputs/
+runs/
+experiments/
+checkpoints/
+generated_samples/
+test_samples/
+
+# Model/checkpoint binaries
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+
+# Logs and local environment
+*.log
+.env
+.venv/
+venv/

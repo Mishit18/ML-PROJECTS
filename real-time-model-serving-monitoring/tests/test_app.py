@@ -53,3 +53,23 @@ def test_drift_endpoint():
     body = response.json()
     assert body["rows_checked"] == 10
     assert len(body["features"]) == 30
+
+
+def test_retraining_decision_endpoint():
+    rows = model_service.baseline_rows[:10]
+    response = client.post("/monitor/retraining_decision", json={"rows": rows})
+    assert response.status_code == 200
+    assert response.json()["action"] in {"monitor", "collect_more_traffic", "retrain_candidate"}
+
+
+def test_shadow_agreement_endpoint():
+    response = client.post(
+        "/monitor/shadow_agreement",
+        json={
+            "champion_probabilities": [0.1, 0.2, 0.8],
+            "challenger_probabilities": [0.12, 0.18, 0.77],
+            "tolerance": 0.1,
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["verdict"] == "safe_shadow"

@@ -1,0 +1,9 @@
+{
+  "val_loss": 2.9699975522351236,
+  "perplexity": 19.49187188445335,
+  "tokens_evaluated": 99625,
+  "tokens_per_sec": 51498.11306260825,
+  "dataset": "tinystories",
+  "checkpoint": "checkpoints\\small_tinystories_baseline\\model_final.pt",
+  "synthetic": false
+}

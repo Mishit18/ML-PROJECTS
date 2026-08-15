@@ -13,7 +13,7 @@ import torch
 import torch.nn as nn
 from typing import Optional, Tuple, List
 from .embeddings import TransformerEmbedding
-from .transformer_block import TransformerBlock
+from .transformer_block import RMSNorm, TransformerBlock
 from .utils import initialize_weights, count_parameters
 
 
@@ -33,6 +33,11 @@ class GPTConfig:
         dropout: float = 0.1,
         bias: bool = True,
         use_sinusoidal_pos: bool = False,
+        position_embedding_type: str = "rope",
+        norm_type: str = "rmsnorm",
+        num_kv_heads: Optional[int] = None,
+        use_flash_attention: bool = True,
+        ffn_activation: str = "swiglu",
     ):
         """
         Args:
@@ -55,6 +60,11 @@ class GPTConfig:
         self.dropout = dropout
         self.bias = bias
         self.use_sinusoidal_pos = use_sinusoidal_pos
+        self.position_embedding_type = position_embedding_type
+        self.norm_type = norm_type
+        self.num_kv_heads = num_kv_heads or num_heads
+        self.use_flash_attention = use_flash_attention
+        self.ffn_activation = ffn_activation
     
     @classmethod
     def from_dict(cls, config_dict: dict):
@@ -73,6 +83,11 @@ class GPTConfig:
             'dropout': self.dropout,
             'bias': self.bias,
             'use_sinusoidal_pos': self.use_sinusoidal_pos,
+            'position_embedding_type': self.position_embedding_type,
+            'norm_type': self.norm_type,
+            'num_kv_heads': self.num_kv_heads,
+            'use_flash_attention': self.use_flash_attention,
+            'ffn_activation': self.ffn_activation,
         }
 
 
@@ -106,6 +121,7 @@ class GPT(nn.Module):
             max_seq_len=config.max_seq_len,
             dropout=config.dropout,
             use_sinusoidal=config.use_sinusoidal_pos,
+            use_positional_embeddings=config.position_embedding_type != "rope",
         )
         
         self.blocks = nn.ModuleList([
@@ -115,11 +131,17 @@ class GPT(nn.Module):
                 d_ff=config.d_ff,
                 dropout=config.dropout,
                 bias=config.bias,
+                norm_type=config.norm_type,
+                num_kv_heads=config.num_kv_heads,
+                use_flash_attention=config.use_flash_attention,
+                use_rope=config.position_embedding_type == "rope",
+                max_seq_len=config.max_seq_len,
+                ffn_activation=config.ffn_activation,
             )
             for _ in range(config.num_layers)
         ])
         
-        self.ln_f = nn.LayerNorm(config.d_model)
+        self.ln_f = nn.LayerNorm(config.d_model) if config.norm_type == "layernorm" else RMSNorm(config.d_model)
         
         self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
         self.lm_head.weight = self.embedding.token_embedding.embedding.weight
@@ -153,6 +175,8 @@ class GPT(nn.Module):
                 - kv_caches: Optional list of (K, V) caches if use_cache=True
         """
         B, T = input_ids.shape
+        if T + start_pos > self.config.max_seq_len:
+            raise ValueError(f"Sequence length {T + start_pos} exceeds max_seq_len={self.config.max_seq_len}")
         
         x = self.embedding(input_ids, start_pos=start_pos)
         
@@ -166,6 +190,7 @@ class GPT(nn.Module):
                 attention_mask=attention_mask,
                 kv_cache=layer_kv_cache,
                 use_cache=use_cache,
+                start_pos=start_pos,
             )
             
             if use_cache:
@@ -219,6 +244,7 @@ class GPT(nn.Module):
         
         kv_caches = None
         
+        max_new_tokens = min(max_new_tokens, max(0, self.config.max_seq_len - input_ids.shape[1]))
         for _ in range(max_new_tokens):
             if use_cache and kv_caches is not None:
                 input_ids_step = input_ids[:, -1:]

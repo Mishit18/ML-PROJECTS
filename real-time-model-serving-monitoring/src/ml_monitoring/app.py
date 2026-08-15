@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException
 
+from .governance import retraining_decision, shadow_model_agreement
 from .model import ModelService
 from .monitoring import LatencyTracker, compute_drift_report, validate_feature_vector
 from .schemas import (
@@ -13,6 +14,9 @@ from .schemas import (
     LatencyReport,
     PredictionRequest,
     PredictionResponse,
+    RetrainingDecisionResponse,
+    ShadowAgreementRequest,
+    ShadowAgreementResponse,
 )
 
 
@@ -70,3 +74,28 @@ def monitor_drift(request: DriftRequest) -> DriftResponse:
 @app.get("/monitor/latency", response_model=LatencyReport)
 def monitor_latency() -> LatencyReport:
     return LatencyReport(**latency_tracker.report())
+
+
+@app.post("/monitor/retraining_decision", response_model=RetrainingDecisionResponse)
+def monitor_retraining_decision(request: DriftRequest) -> RetrainingDecisionResponse:
+    try:
+        for row in request.rows:
+            validate_feature_vector(row, expected_count=len(model_service.feature_names))
+        drift = compute_drift_report(model_service.baseline_rows, request.rows, model_service.feature_names)
+        decision = retraining_decision(drift, latency_tracker.report())
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return RetrainingDecisionResponse(**decision)
+
+
+@app.post("/monitor/shadow_agreement", response_model=ShadowAgreementResponse)
+def monitor_shadow_agreement(request: ShadowAgreementRequest) -> ShadowAgreementResponse:
+    try:
+        report = shadow_model_agreement(
+            request.champion_probabilities,
+            request.challenger_probabilities,
+            tolerance=request.tolerance,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return ShadowAgreementResponse(**report)

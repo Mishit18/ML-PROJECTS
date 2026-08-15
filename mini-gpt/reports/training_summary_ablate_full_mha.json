@@ -1,0 +1,16 @@
+{
+  "checkpoint": "checkpoints\\ablations\\small_tinystories_full_mha\\model_final.pt",
+  "step": 468,
+  "epoch": 3,
+  "tokens_trained": 3055551,
+  "final_train_loss": 3.384753942489624,
+  "final_val_loss": 2.9548305824595684,
+  "final_perplexity": 19.198469886749187,
+  "best_val_loss": 2.9548305824595684,
+  "best_perplexity": 19.198469886749187,
+  "num_train_loss_points": 468,
+  "num_val_points": 4,
+  "synthetic": false,
+  "dataset": "tinystories",
+  "run_name": "ablate_full_mha"
+}

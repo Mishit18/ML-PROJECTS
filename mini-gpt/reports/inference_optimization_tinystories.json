@@ -1,0 +1,103 @@
+{
+  "device": "cuda",
+  "cuda_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "checkpoint": "checkpoints\\small_tinystories\\model_final.pt",
+  "config": {
+    "vocab_size": 50257,
+    "max_seq_len": 512,
+    "d_model": 384,
+    "num_layers": 6,
+    "num_heads": 6,
+    "d_ff": 1536,
+    "dropout": 0.1,
+    "bias": true,
+    "use_sinusoidal_pos": false,
+    "position_embedding_type": "rope",
+    "norm_type": "rmsnorm",
+    "num_kv_heads": 2,
+    "use_flash_attention": true,
+    "ffn_activation": "swiglu"
+  },
+  "results": [
+    {
+      "batch_size": 1,
+      "use_cache": false,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 132.13526563273578,
+      "latency_seconds_p50": 0.9687042999994446,
+      "latency_seconds_p95": 1.2530606999989686,
+      "peak_gpu_memory_mb": 184.05029296875,
+      "estimated_kv_cache_mb": 0.7734375
+    },
+    {
+      "batch_size": 1,
+      "use_cache": true,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 122.86269306947999,
+      "latency_seconds_p50": 1.0418134000010468,
+      "latency_seconds_p95": 1.1317997000005562,
+      "peak_gpu_memory_mb": 136.7470703125,
+      "estimated_kv_cache_mb": 0.7734375
+    },
+    {
+      "batch_size": 2,
+      "use_cache": false,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 262.3088961856499,
+      "latency_seconds_p50": 0.9759486000002653,
+      "latency_seconds_p95": 1.054750299999796,
+      "peak_gpu_memory_mb": 234.478515625,
+      "estimated_kv_cache_mb": 1.546875
+    },
+    {
+      "batch_size": 2,
+      "use_cache": true,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 273.92262006997566,
+      "latency_seconds_p50": 0.9345704999996087,
+      "latency_seconds_p95": 1.0063573999996152,
+      "peak_gpu_memory_mb": 139.244140625,
+      "estimated_kv_cache_mb": 1.546875
+    },
+    {
+      "batch_size": 4,
+      "use_cache": false,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 458.77794994838763,
+      "latency_seconds_p50": 1.11600830000134,
+      "latency_seconds_p95": 1.1805782000010367,
+      "peak_gpu_memory_mb": 336.01416015625,
+      "estimated_kv_cache_mb": 3.09375
+    },
+    {
+      "batch_size": 4,
+      "use_cache": true,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 520.134909992079,
+      "latency_seconds_p50": 0.9843600000003789,
+      "latency_seconds_p95": 1.0456262999996397,
+      "peak_gpu_memory_mb": 144.23681640625,
+      "estimated_kv_cache_mb": 3.09375
+    },
+    {
+      "batch_size": 8,
+      "use_cache": false,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 446.4616216098408,
+      "latency_seconds_p50": 2.2935901999990165,
+      "latency_seconds_p95": 6.0781671999993705,
+      "peak_gpu_memory_mb": 539.71044921875,
+      "estimated_kv_cache_mb": 6.1875
+    },
+    {
+      "batch_size": 8,
+      "use_cache": true,
+      "generated_tokens": 128,
+      "tokens_per_sec_p50": 1014.4178093726402,
+      "latency_seconds_p50": 1.0094460000000254,
+      "latency_seconds_p95": 1.0277084999997896,
+      "peak_gpu_memory_mb": 155.1552734375,
+      "estimated_kv_cache_mb": 6.1875
+    }
+  ]
+}

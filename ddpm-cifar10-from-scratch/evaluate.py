@@ -44,7 +44,7 @@ def main():
     fid = FrechetInceptionDistance(feature=2048, normalize=False).to(device)
     inception = InceptionScore(normalize=False).to(device)
 
-    real_loader = make_cifar10_loader(config["data_dir"], args.batch_size, config["num_workers"], train=False)
+    real_loader = make_cifar10_loader(config["data_dir"], args.batch_size, num_workers=0, train=False)
     seen_real = 0
     for real, _ in tqdm(real_loader, desc="real stats"):
         real = real.to(device)

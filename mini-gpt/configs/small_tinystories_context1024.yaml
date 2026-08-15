@@ -1,0 +1,26 @@
+# Inference-only config for RoPE models. Same weights as small_tinystories,
+# but a longer context window for prompt-length/KV-cache benchmarks.
+
+model:
+  vocab_size: 50257
+  max_seq_len: 1024
+  d_model: 384
+  num_layers: 6
+  num_heads: 6
+  d_ff: 1536
+  dropout: 0.1
+  bias: true
+  use_sinusoidal_pos: false
+  position_embedding_type: rope
+  norm_type: rmsnorm
+  num_kv_heads: 2
+  use_flash_attention: true
+  ffn_activation: swiglu
+
+data:
+  dataset_name: tinystories
+  num_train: 5000
+  num_val: 500
+
+training:
+  run_name: small_tinystories_context1024

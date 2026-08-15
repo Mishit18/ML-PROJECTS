@@ -1,0 +1,7 @@
+[
+  "### Instruction:\nExplain LoRA fine-tuning to a second-year engineering student using one equation and one intuition.\n\n### Response:\n",
+  "### Instruction:\nGive a concise checklist for debugging CUDA out-of-memory during QLoRA training.\n\n### Response:\n",
+  "### Instruction:\nCompare LoRA rank 4, 8, and 16 for a 7B model. Mention parameter count and overfitting tradeoffs.\n\n### Response:\n",
+  "### Instruction:\nWrite three resume bullets for a project that fine-tuned Mistral 7B with QLoRA on Alpaca.\n\n### Response:\n",
+  "### Instruction:\nA model's train loss decreases but validation perplexity increases. Diagnose the likely issue and suggest two fixes.\n\n### Response:\n"
+]

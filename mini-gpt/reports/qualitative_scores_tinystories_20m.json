@@ -1,0 +1,15 @@
+{
+  "checkpoint": "checkpoints\\small_tinystories_20m\\checkpoint_epoch_15.pt",
+  "dataset": "tinystories validation prompts",
+  "synthetic": false,
+  "num_prompts": 50,
+  "rubric": "automated proxy scores from 1-5; higher is better",
+  "mean_scores": {
+    "coherence": 5,
+    "repetition": 4.16,
+    "entity_consistency": 2.94,
+    "ending_completeness": 3.32,
+    "grammar": 3.78,
+    "average": 3.84
+  }
+}

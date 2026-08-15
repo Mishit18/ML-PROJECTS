@@ -1,0 +1,211 @@
+{
+  "drift": {
+    "rows_checked": 50,
+    "drifted_features": 24,
+    "max_psi": 1.252952,
+    "status": "severe",
+    "features": [
+      {
+        "feature": "mean_radius",
+        "psi": 0.156722,
+        "status": "moderate"
+      },
+      {
+        "feature": "mean_texture",
+        "psi": 0.112536,
+        "status": "moderate"
+      },
+      {
+        "feature": "mean_perimeter",
+        "psi": 1.252952,
+        "status": "severe"
+      },
+      {
+        "feature": "mean_area",
+        "psi": 0.120935,
+        "status": "moderate"
+      },
+      {
+        "feature": "mean_smoothness",
+        "psi": 0.084183,
+        "status": "stable"
+      },
+      {
+        "feature": "mean_compactness",
+        "psi": 0.08467,
+        "status": "stable"
+      },
+      {
+        "feature": "mean_concavity",
+        "psi": 0.115444,
+        "status": "moderate"
+      },
+      {
+        "feature": "mean_concave_points",
+        "psi": 0.174965,
+        "status": "moderate"
+      },
+      {
+        "feature": "mean_symmetry",
+        "psi": 0.112773,
+        "status": "moderate"
+      },
+      {
+        "feature": "mean_fractal_dimension",
+        "psi": 0.151037,
+        "status": "moderate"
+      },
+      {
+        "feature": "radius_error",
+        "psi": 1.252894,
+        "status": "severe"
+      },
+      {
+        "feature": "texture_error",
+        "psi": 1.215046,
+        "status": "severe"
+      },
+      {
+        "feature": "perimeter_error",
+        "psi": 0.223694,
+        "status": "moderate"
+      },
+      {
+        "feature": "area_error",
+        "psi": 0.203539,
+        "status": "moderate"
+      },
+      {
+        "feature": "smoothness_error",
+        "psi": 0.272866,
+        "status": "severe"
+      },
+      {
+        "feature": "compactness_error",
+        "psi": 0.075515,
+        "status": "stable"
+      },
+      {
+        "feature": "concavity_error",
+        "psi": 0.100628,
+        "status": "moderate"
+      },
+      {
+        "feature": "concave_points_error",
+        "psi": 0.143723,
+        "status": "moderate"
+      },
+      {
+        "feature": "symmetry_error",
+        "psi": 0.116332,
+        "status": "moderate"
+      },
+      {
+        "feature": "fractal_dimension_error",
+        "psi": 0.246645,
+        "status": "moderate"
+      },
+      {
+        "feature": "worst_radius",
+        "psi": 0.036233,
+        "status": "stable"
+      },
+      {
+        "feature": "worst_texture",
+        "psi": 0.272,
+        "status": "severe"
+      },
+      {
+        "feature": "worst_perimeter",
+        "psi": 0.117687,
+        "status": "moderate"
+      },
+      {
+        "feature": "worst_area",
+        "psi": 0.072545,
+        "status": "stable"
+      },
+      {
+        "feature": "worst_smoothness",
+        "psi": 0.385379,
+        "status": "severe"
+      },
+      {
+        "feature": "worst_compactness",
+        "psi": 0.160917,
+        "status": "moderate"
+      },
+      {
+        "feature": "worst_concavity",
+        "psi": 0.148732,
+        "status": "moderate"
+      },
+      {
+        "feature": "worst_concave_points",
+        "psi": 0.087394,
+        "status": "stable"
+      },
+      {
+        "feature": "worst_symmetry",
+        "psi": 0.269375,
+        "status": "severe"
+      },
+      {
+        "feature": "worst_fractal_dimension",
+        "psi": 0.137058,
+        "status": "moderate"
+      }
+    ]
+  },
+  "latency": {
+    "request_count": 5,
+    "avg_ms": 9.36,
+    "p50_ms": 9.1,
+    "p95_ms": 11.06,
+    "max_ms": 11.2
+  },
+  "retraining_decision": {
+    "action": "collect_more_traffic",
+    "reasons": [
+      "max_psi_breach",
+      "feature_drift_share_breach"
+    ],
+    "severe_features": [
+      "mean_perimeter",
+      "radius_error",
+      "texture_error",
+      "smoothness_error",
+      "worst_texture",
+      "worst_smoothness",
+      "worst_symmetry"
+    ],
+    "moderate_features": [
+      "mean_radius",
+      "mean_texture",
+      "mean_area",
+      "mean_concavity",
+      "mean_concave_points",
+      "mean_symmetry",
+      "mean_fractal_dimension",
+      "perimeter_error",
+      "area_error",
+      "concavity_error",
+      "concave_points_error",
+      "symmetry_error",
+      "fractal_dimension_error",
+      "worst_perimeter",
+      "worst_compactness",
+      "worst_concavity",
+      "worst_fractal_dimension"
+    ],
+    "drifted_feature_share": 0.8,
+    "request_count": 5
+  },
+  "shadow_agreement": {
+    "rows_compared": 3,
+    "mean_abs_probability_delta": 0.023333,
+    "max_abs_probability_delta": 0.03,
+    "disagreement_rate": 0.0,
+    "verdict": "safe_shadow"
+  }
+}

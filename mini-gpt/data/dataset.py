@@ -5,8 +5,7 @@ Handles tokenization, batching, and sequence preparation.
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-from typing import List, Dict, Optional
-import numpy as np
+from typing import Dict, List
 
 
 class TextDataset(Dataset):
@@ -153,28 +152,76 @@ def create_dataloaders(
     train_dataset = TextDataset(train_texts, tokenizer, max_length, is_validation=False)
     val_dataset = TextDataset(val_texts, tokenizer, max_length, is_validation=True)
     
-    train_loader = DataLoader(
-        train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=num_workers,
-        collate_fn=lambda batch: collate_fn(batch, tokenizer.pad_token_id),
-        pin_memory=True,
-    )
+    train_loader = None
+    if len(train_dataset) > 0:
+        train_loader = DataLoader(
+            train_dataset,
+            batch_size=batch_size,
+            shuffle=True,
+            num_workers=num_workers,
+            collate_fn=lambda batch: collate_fn(batch, tokenizer.pad_token_id),
+            pin_memory=True,
+        )
     
-    val_loader = DataLoader(
-        val_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=num_workers,
-        collate_fn=lambda batch: collate_fn(batch, tokenizer.pad_token_id),
-        pin_memory=True,
-    )
+    val_loader = None
+    if len(val_dataset) > 0:
+        val_loader = DataLoader(
+            val_dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            num_workers=num_workers,
+            collate_fn=lambda batch: collate_fn(batch, tokenizer.pad_token_id),
+            pin_memory=True,
+        )
     
     return train_loader, val_loader
 
 
-def load_sample_data(tokenizer, num_train: int = 1000, num_val: int = 100) -> tuple:
+def load_text_dataset(dataset_name: str = "wikitext-2", num_train: int = 1000, num_val: int = 100) -> tuple:
+    """
+    Load a real language-modeling dataset.
+
+    Supported names:
+    - wikitext-2: Hugging Face wikitext-2-raw-v1 train/validation splits
+    - tinystories: TinyStories train/validation slices
+    - openwebtext-small: first rows from OpenWebText train split, with a train/val slice
+    """
+    from datasets import load_dataset
+
+    name = dataset_name.lower()
+    if name in {"wikitext", "wikitext-2", "wikitext2"}:
+        train = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
+        val = load_dataset("wikitext", "wikitext-2-raw-v1", split="validation")
+        train_texts = [item["text"] for item in train if len(item["text"].strip()) > 50]
+        val_texts = [item["text"] for item in val if len(item["text"].strip()) > 50]
+    elif name in {"tinystories", "tiny-stories"}:
+        train_texts = []
+        if num_train > 0:
+            train = load_dataset("roneneldan/TinyStories", split=f"train[:{num_train}]")
+            train_texts = [item["text"] for item in train if len(item["text"].strip()) > 50]
+        val = load_dataset("roneneldan/TinyStories", split=f"validation[:{num_val}]")
+        val_texts = [item["text"] for item in val if len(item["text"].strip()) > 50]
+        return train_texts, val_texts
+    elif name in {"openwebtext-small", "openwebtext"}:
+        total = num_train + num_val
+        ds = load_dataset("Skylion007/openwebtext", split=f"train[:{total}]")
+        texts = [item["text"] for item in ds if len(item["text"].strip()) > 50]
+        train_texts = texts[:num_train]
+        val_texts = texts[num_train : num_train + num_val]
+    else:
+        raise ValueError(f"Unsupported dataset_name={dataset_name}")
+
+    return train_texts[:num_train], val_texts[:num_val]
+
+
+def load_sample_data(
+    tokenizer=None,
+    num_train: int = 1000,
+    num_val: int = 100,
+    dataset_name: str = "wikitext-2",
+    allow_synthetic_fallback: bool = False,
+    return_metadata: bool = False,
+) -> tuple:
     """
     Load sample dataset for demonstration.
     Uses a small subset of a public dataset.
@@ -187,18 +234,20 @@ def load_sample_data(tokenizer, num_train: int = 1000, num_val: int = 100) -> tu
     Returns:
         (train_texts, val_texts)
     """
+    metadata = {"dataset_name": dataset_name, "synthetic": False}
     try:
-        from datasets import load_dataset
-        
-        dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
-        texts = [item['text'] for item in dataset if len(item['text'].strip()) > 50]
-        
-        train_texts = texts[:num_train]
-        val_texts = texts[num_train:num_train + num_val]
-        
+        train_texts, val_texts = load_text_dataset(dataset_name=dataset_name, num_train=num_train, num_val=num_val)
+        if return_metadata:
+            return train_texts, val_texts, metadata
         return train_texts, val_texts
         
     except Exception as e:
+        if not allow_synthetic_fallback:
+            raise RuntimeError(
+                f"Could not load requested dataset '{dataset_name}'. "
+                "Refusing to silently replace it with synthetic text. "
+                "Pass allow_synthetic_fallback=True only for smoke tests."
+            ) from e
         print(f"Could not load dataset: {e}")
         print("Using synthetic data for demonstration...")
         
@@ -211,4 +260,7 @@ def load_sample_data(tokenizer, num_train: int = 1000, num_val: int = 100) -> tu
             for i in range(num_val)
         ]
         
+        metadata = {"dataset_name": dataset_name, "synthetic": True, "fallback_error": str(e)}
+        if return_metadata:
+            return train_texts, val_texts, metadata
         return train_texts, val_texts

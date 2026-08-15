@@ -1,0 +1,16 @@
+{
+  "checkpoint": "checkpoints\\small_tinystories_continue_low_lr\\model_best.pt",
+  "step": 156,
+  "epoch": 1,
+  "tokens_trained": 1018517,
+  "final_train_loss": 1.6100056171417236,
+  "final_val_loss": 2.2847957008103355,
+  "final_perplexity": 9.823679049322966,
+  "best_val_loss": 2.2847957008103355,
+  "best_perplexity": 9.823679049322966,
+  "num_train_loss_points": 156,
+  "num_val_points": 1,
+  "synthetic": false,
+  "dataset": "tinystories",
+  "run_name": "small_tinystories_continue_low_lr"
+}

@@ -1,0 +1,40 @@
+# Continue from the best 20M-run checkpoint with a lower LR.
+
+model:
+  vocab_size: 50257
+  max_seq_len: 512
+  d_model: 384
+  num_layers: 6
+  num_heads: 6
+  d_ff: 1536
+  dropout: 0.1
+  bias: true
+  use_sinusoidal_pos: false
+  position_embedding_type: rope
+  norm_type: rmsnorm
+  num_kv_heads: 2
+  use_flash_attention: true
+  ffn_activation: swiglu
+
+data:
+  dataset_name: tinystories
+  num_train: 5000
+  num_val: 500
+
+training:
+  num_epochs: 6
+  batch_size: 8
+  grad_accum_steps: 4
+  learning_rate: 7.5e-5
+  weight_decay: 0.1
+  warmup_ratio: 0.02
+  min_lr_ratio: 0.2
+  max_grad_norm: 1.0
+  use_amp: true
+  log_interval: 100
+  eval_interval: 200
+  save_interval: 1000
+  target_perplexity: 9.95
+  checkpoint_dir: checkpoints/small_tinystories_continue_low_lr
+  experiment_dir: experiments
+  run_name: small_tinystories_continue_low_lr

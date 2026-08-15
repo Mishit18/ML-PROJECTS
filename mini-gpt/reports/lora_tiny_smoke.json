@@ -1,0 +1,14 @@
+{
+  "dataset": "synthetic toy instruction dataset",
+  "synthetic": true,
+  "base_checkpoint": "checkpoints\\tiny_smoke\\model_final.pt",
+  "trainable_params": 3584,
+  "total_params_with_lora": 3295104,
+  "trainable_percent": 0.10876743192324127,
+  "final_train_loss": 10.686487197875977,
+  "losses": [
+    10.692486763000488,
+    10.711017608642578,
+    10.686487197875977
+  ]
+}

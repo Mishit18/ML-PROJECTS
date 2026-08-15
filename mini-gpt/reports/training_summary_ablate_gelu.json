@@ -1,0 +1,16 @@
+{
+  "checkpoint": "checkpoints\\ablations\\small_tinystories_gelu\\model_final.pt",
+  "step": 468,
+  "epoch": 3,
+  "tokens_trained": 3055551,
+  "final_train_loss": 3.3489434719085693,
+  "final_val_loss": 3.0640870784343113,
+  "final_perplexity": 21.414902933883795,
+  "best_val_loss": 3.0640870784343113,
+  "best_perplexity": 21.414902933883795,
+  "num_train_loss_points": 468,
+  "num_val_points": 4,
+  "synthetic": false,
+  "dataset": "tinystories",
+  "run_name": "ablate_gelu"
+}

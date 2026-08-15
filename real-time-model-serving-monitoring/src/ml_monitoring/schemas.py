@@ -66,5 +66,28 @@ class LatencyReport(BaseModel):
     max_ms: float | None
 
 
+class RetrainingDecisionResponse(BaseModel):
+    action: str
+    reasons: list[str]
+    severe_features: list[str]
+    moderate_features: list[str]
+    drifted_feature_share: float
+    request_count: int
+
+
+class ShadowAgreementRequest(BaseModel):
+    champion_probabilities: list[float] = Field(..., min_length=1, max_length=5000)
+    challenger_probabilities: list[float] = Field(..., min_length=1, max_length=5000)
+    tolerance: float = Field(0.10, gt=0, le=1)
+
+
+class ShadowAgreementResponse(BaseModel):
+    rows_compared: int
+    mean_abs_probability_delta: float
+    max_abs_probability_delta: float
+    disagreement_rate: float
+    verdict: str
+
+
 class ErrorResponse(BaseModel):
     detail: str | dict[str, Any]

@@ -1,0 +1,16 @@
+{
+  "checkpoint": "checkpoints\\small_wikitext2\\model_final.pt",
+  "step": 93,
+  "epoch": 3,
+  "tokens_trained": 447594,
+  "final_train_loss": 7.02672004699707,
+  "final_val_loss": 7.237220409821141,
+  "final_perplexity": 1390.2243414400398,
+  "best_val_loss": 7.237220409821141,
+  "best_perplexity": 1390.2243414400398,
+  "num_train_loss_points": 93,
+  "num_val_points": 3,
+  "synthetic": false,
+  "dataset": "wikitext-2",
+  "run_name": "small_wikitext2"
+}
