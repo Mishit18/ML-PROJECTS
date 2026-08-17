@@ -3,6 +3,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pandas as pd
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -13,7 +15,7 @@ from credit_lifecycle.features import infer_feature_spec, temporal_split
 from credit_lifecycle.modeling import permutation_explain, train_and_select
 from credit_lifecycle.monitoring import drift_report
 from credit_lifecycle.policy import select_policy, threshold_frontier
-from credit_lifecycle.real_data import run_openml_german_credit
+from credit_lifecycle.real_data import run_openml_german_credit, run_uci_credit_card_default
 from credit_lifecycle.reporting import write_plots, write_reports
 from credit_lifecycle.sql_analytics import run_sql_analytics
 from build_casebook import main as build_casebook
@@ -42,7 +44,9 @@ def main() -> None:
     reasons = build_reason_codes(scored, importance)
     reasons.to_csv(ROOT / "outputs" / "adverse_action_reason_codes.csv", index=False)
     approval_decision_explainer(scored).to_csv(ROOT / "outputs" / "customer_decision_explanations.csv", index=False)
-    real_benchmark = run_openml_german_credit(ROOT / "outputs")
+    openml_benchmark = run_openml_german_credit(ROOT / "outputs")
+    uci_benchmark = run_uci_credit_card_default(ROOT / "outputs", ROOT / ".cache")
+    real_benchmark = pd.concat([uci_benchmark, openml_benchmark], ignore_index=True, sort=False)
 
     run_sql_analytics(scored, ROOT / "outputs", ROOT / "queries")
     write_plots(scored, importance, ROOT / "outputs", frontier=frontier, fairness=fairness)
@@ -62,6 +66,7 @@ def main() -> None:
     print("Credit risk lifecycle pipeline complete")
     print(metrics.head(3).to_string(index=False))
     print(real_benchmark.head(2).to_string(index=False))
+    print(uci_benchmark.head(2).to_string(index=False))
     print(f"Selected policy threshold: {policy['pd_threshold']:.2%} | approval {policy['approval_rate']:.2%} | default {policy['approved_default_rate']:.2%}")
     print(f"Scored customers: {len(scored):,}")
     print(f"Reports written to: {ROOT / 'reports'}")

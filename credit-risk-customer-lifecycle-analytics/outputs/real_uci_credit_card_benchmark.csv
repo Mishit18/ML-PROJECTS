@@ -1,0 +1,3 @@
+dataset,model,records,test_records,default_rate,roc_auc,pr_auc,ks,brier_score
+UCI Default of Credit Card Clients,gradient_boosting,30000,7500,0.2212,0.77483,0.55537,0.42077,0.1356
+UCI Default of Credit Card Clients,logistic_scorecard,30000,7500,0.2212,0.71553,0.50231,0.37065,0.14558

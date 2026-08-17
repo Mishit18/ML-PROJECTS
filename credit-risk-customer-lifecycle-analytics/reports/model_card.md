@@ -18,10 +18,12 @@ Synthetic portfolio with bureau behavior, income, utilization, repayment behavio
 
 ## Real Public Dataset Benchmark
 
-| dataset                    | model                   |   records |   test_records |   bad_rate |   roc_auc |   pr_auc |      ks |
-|:---------------------------|:------------------------|----------:|---------------:|-----------:|----------:|---------:|--------:|
-| OpenML credit-g data_id=31 | real_logistic_scorecard |      1000 |            300 |        0.3 |   0.80106 |  0.64467 | 0.49365 |
-| OpenML credit-g data_id=31 | real_gradient_boosting  |      1000 |            300 |        0.3 |   0.76466 |  0.57531 | 0.42857 |
+| dataset                            | model                   |   records |   test_records |   default_rate |   roc_auc |   pr_auc |      ks |   brier_score |   bad_rate |
+|:-----------------------------------|:------------------------|----------:|---------------:|---------------:|----------:|---------:|--------:|--------------:|-----------:|
+| UCI Default of Credit Card Clients | gradient_boosting       |     30000 |           7500 |         0.2212 |   0.77483 |  0.55537 | 0.42077 |       0.1356  |      nan   |
+| UCI Default of Credit Card Clients | logistic_scorecard      |     30000 |           7500 |         0.2212 |   0.71553 |  0.50231 | 0.37065 |       0.14558 |      nan   |
+| OpenML credit-g data_id=31         | real_logistic_scorecard |      1000 |            300 |       nan      |   0.80106 |  0.64467 | 0.49365 |     nan       |        0.3 |
+| OpenML credit-g data_id=31         | real_gradient_boosting  |      1000 |            300 |       nan      |   0.76466 |  0.57531 | 0.42857 |     nan       |        0.3 |
 
 ## Policy Frontier
 

@@ -15,7 +15,7 @@ High-paying fintech and analytics JDs often mention credit risk, behavioral mode
 - Policy simulation: probability of default, risk bands, approval rate, realized default rate, and risk-adjusted margin.
 - SQL analytics layer in DuckDB for risk-band, acquisition-channel, segment profitability, and monthly monitoring views.
 - Explainability via permutation importance, adverse-action style reason codes, fairness diagnostics, and monitoring via population stability index.
-- Real public-data validation on OpenML German Credit (`credit-g`, data id 31) in addition to the synthetic lifecycle portfolio.
+- Real public-data validation on 30,000 customers from UCI Default of Credit Card Clients, plus OpenML German Credit, in addition to the synthetic lifecycle portfolio.
 - Streamlit dashboard for risk policy, lifecycle, fairness, reason codes, and monitoring.
 - Reports, plots, tests, and resume bullets generated from one command.
 
@@ -106,4 +106,5 @@ streamlit run dashboard/app.py
 ## Limitations
 
 - Uses synthetic data for reproducibility and privacy; it is not a production underwriting model.
+- The real-data benchmarks are downloaded from their public sources, cached locally, and reported separately from the synthetic lifecycle simulation.
 - Real deployment would require bureau data contracts, reject inference, fairness testing, adverse-action reason codes, regulatory review, and live champion/challenger monitoring.
