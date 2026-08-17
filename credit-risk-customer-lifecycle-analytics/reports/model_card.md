@@ -18,12 +18,14 @@ Synthetic portfolio with bureau behavior, income, utilization, repayment behavio
 
 ## Real Public Dataset Benchmark
 
-| dataset                            | model                   |   records |   test_records |   default_rate |   roc_auc |   pr_auc |      ks |   brier_score |   bad_rate |
-|:-----------------------------------|:------------------------|----------:|---------------:|---------------:|----------:|---------:|--------:|--------------:|-----------:|
-| UCI Default of Credit Card Clients | gradient_boosting       |     30000 |           7500 |         0.2212 |   0.77483 |  0.55537 | 0.42077 |       0.1356  |      nan   |
-| UCI Default of Credit Card Clients | logistic_scorecard      |     30000 |           7500 |         0.2212 |   0.71553 |  0.50231 | 0.37065 |       0.14558 |      nan   |
-| OpenML credit-g data_id=31         | real_logistic_scorecard |      1000 |            300 |       nan      |   0.80106 |  0.64467 | 0.49365 |     nan       |        0.3 |
-| OpenML credit-g data_id=31         | real_gradient_boosting  |      1000 |            300 |       nan      |   0.76466 |  0.57531 | 0.42857 |     nan       |        0.3 |
+| dataset                            | model                      |   records |   test_records |   default_rate |   roc_auc |   pr_auc |      ks |   brier_score |   ece_10bin |   roc_auc_ci_low |   roc_auc_ci_high | validation                                              |   bad_rate |
+|:-----------------------------------|:---------------------------|----------:|---------------:|---------------:|----------:|---------:|--------:|--------------:|------------:|-----------------:|------------------:|:--------------------------------------------------------|-----------:|
+| UCI Default of Credit Card Clients | gradient_boosting          |     30000 |           7500 |         0.2212 |   0.77483 |  0.55537 | 0.42077 |       0.1356  |     0.01034 |          0.76171 |           0.78875 | stratified holdout; source has no observation timestamp |      nan   |
+| UCI Default of Credit Card Clients | gradient_boosting_isotonic |     30000 |           7500 |         0.2212 |   0.77446 |  0.55266 | 0.42192 |       0.13543 |     0.00838 |          0.76113 |           0.78836 | stratified holdout; source has no observation timestamp |      nan   |
+| UCI Default of Credit Card Clients | gradient_boosting_sigmoid  |     30000 |           7500 |         0.2212 |   0.77417 |  0.555   | 0.41982 |       0.13564 |     0.0136  |          0.76105 |           0.78817 | stratified holdout; source has no observation timestamp |      nan   |
+| UCI Default of Credit Card Clients | logistic_scorecard         |     30000 |           7500 |         0.2212 |   0.71553 |  0.50231 | 0.37065 |       0.14558 |     0.04907 |          0.70331 |           0.72953 | stratified holdout; source has no observation timestamp |      nan   |
+| OpenML credit-g data_id=31         | real_logistic_scorecard    |      1000 |            300 |       nan      |   0.80106 |  0.64467 | 0.49365 |     nan       |   nan       |        nan       |         nan       | nan                                                     |        0.3 |
+| OpenML credit-g data_id=31         | real_gradient_boosting     |      1000 |            300 |       nan      |   0.76466 |  0.57531 | 0.42857 |     nan       |   nan       |        nan       |         nan       | nan                                                     |        0.3 |
 
 ## Policy Frontier
 

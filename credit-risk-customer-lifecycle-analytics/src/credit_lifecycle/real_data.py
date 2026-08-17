@@ -6,6 +6,7 @@ from zipfile import ZipFile
 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.datasets import fetch_openml
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
@@ -16,11 +17,39 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from .modeling import ks_statistic
 
+import numpy as np
+
 
 UCI_CREDIT_URL = (
     "https://archive.ics.uci.edu/static/public/350/"
     "default+of+credit+card+clients.zip"
 )
+
+
+def expected_calibration_error(y_true, probability, bins: int = 10) -> float:
+    frame = pd.DataFrame({"actual": np.asarray(y_true), "probability": np.asarray(probability)})
+    frame["bin"] = pd.cut(frame["probability"], bins=np.linspace(0, 1, bins + 1), include_lowest=True)
+    grouped = frame.groupby("bin", observed=True).agg(
+        observations=("actual", "size"),
+        observed_rate=("actual", "mean"),
+        predicted_rate=("probability", "mean"),
+    )
+    return float(
+        ((grouped["observations"] / len(frame)) * (grouped["observed_rate"] - grouped["predicted_rate"]).abs()).sum()
+    )
+
+
+def bootstrap_auc_interval(y_true, probability, iterations: int = 300, seed: int = 42) -> tuple[float, float]:
+    y_array = np.asarray(y_true)
+    probability_array = np.asarray(probability)
+    rng = np.random.default_rng(seed)
+    scores = []
+    for _ in range(iterations):
+        indices = rng.integers(0, len(y_array), len(y_array))
+        if np.unique(y_array[indices]).size < 2:
+            continue
+        scores.append(roc_auc_score(y_array[indices], probability_array[indices]))
+    return float(np.quantile(scores, 0.025)), float(np.quantile(scores, 0.975))
 
 
 def _load_uci_credit_card_default(cache_dir: Path) -> tuple[pd.DataFrame, pd.Series]:
@@ -57,12 +86,17 @@ def run_uci_credit_card_default(output_dir: Path, cache_dir: Path) -> pd.DataFra
         X, y, test_size=0.25, random_state=42, stratify=y
     )
 
+    gbm_parameters = dict(random_state=42, learning_rate=0.04, max_depth=2, n_estimators=180)
     candidates = {
         "logistic_scorecard": Pipeline(
             [("scale", StandardScaler()), ("model", LogisticRegression(max_iter=3000))]
         ),
-        "gradient_boosting": GradientBoostingClassifier(
-            random_state=42, learning_rate=0.04, max_depth=2, n_estimators=180
+        "gradient_boosting": GradientBoostingClassifier(**gbm_parameters),
+        "gradient_boosting_sigmoid": CalibratedClassifierCV(
+            GradientBoostingClassifier(**gbm_parameters), method="sigmoid", cv=5
+        ),
+        "gradient_boosting_isotonic": CalibratedClassifierCV(
+            GradientBoostingClassifier(**gbm_parameters), method="isotonic", cv=5
         ),
     }
     rows: list[dict[str, float | int | str]] = []
@@ -70,6 +104,7 @@ def run_uci_credit_card_default(output_dir: Path, cache_dir: Path) -> pd.DataFra
     for name, model in candidates.items():
         model.fit(X_train, y_train)
         probability = model.predict_proba(X_test)[:, 1]
+        auc_low, auc_high = bootstrap_auc_interval(y_test, probability)
         rows.append(
             {
                 "dataset": "UCI Default of Credit Card Clients",
@@ -81,6 +116,10 @@ def run_uci_credit_card_default(output_dir: Path, cache_dir: Path) -> pd.DataFra
                 "pr_auc": round(float(average_precision_score(y_test, probability)), 5),
                 "ks": round(float(ks_statistic(y_test, probability)), 5),
                 "brier_score": round(float(brier_score_loss(y_test, probability)), 5),
+                "ece_10bin": round(expected_calibration_error(y_test, probability), 5),
+                "roc_auc_ci_low": round(auc_low, 5),
+                "roc_auc_ci_high": round(auc_high, 5),
+                "validation": "stratified holdout; source has no observation timestamp",
             }
         )
 
@@ -109,6 +148,9 @@ def run_uci_credit_card_default(output_dir: Path, cache_dir: Path) -> pd.DataFra
     results.to_csv(output_dir / "real_uci_credit_card_benchmark.csv", index=False)
     pd.DataFrame(calibration_rows).to_csv(
         output_dir / "real_uci_credit_card_calibration.csv", index=False
+    )
+    results[["model", "brier_score", "ece_10bin", "roc_auc", "roc_auc_ci_low", "roc_auc_ci_high"]].to_csv(
+        output_dir / "real_uci_calibration_comparison.csv", index=False
     )
     return results
 

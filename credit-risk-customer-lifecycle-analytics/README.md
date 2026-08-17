@@ -16,6 +16,7 @@ High-paying fintech and analytics JDs often mention credit risk, behavioral mode
 - SQL analytics layer in DuckDB for risk-band, acquisition-channel, segment profitability, and monthly monitoring views.
 - Explainability via permutation importance, adverse-action style reason codes, fairness diagnostics, and monitoring via population stability index.
 - Real public-data validation on 30,000 customers from UCI Default of Credit Card Clients, plus OpenML German Credit, in addition to the synthetic lifecycle portfolio.
+- Calibration comparison across uncalibrated, sigmoid, and isotonic gradient boosting using Brier score, 10-bin ECE, score bands, and bootstrap ROC-AUC intervals.
 - Streamlit dashboard for risk policy, lifecycle, fairness, reason codes, and monitoring.
 - Reports, plots, tests, and resume bullets generated from one command.
 
@@ -65,6 +66,7 @@ credit-risk-customer-lifecycle-analytics/
 | `outputs/fairness_group_metrics.csv` | Approval/default/churn diagnostics by age, income, region, segment, channel |
 | `outputs/adverse_action_reason_codes.csv` | Customer-level reason codes for highest-risk cases |
 | `outputs/real_openml_german_credit_benchmark.csv` | Real public-data benchmark on OpenML credit-g |
+| `outputs/real_uci_calibration_comparison.csv` | Calibration and uncertainty comparison on 30,000 real UCI customers |
 | `reports/executive_brief.md` | Business-facing summary |
 | `reports/model_card.md` | Model governance documentation |
 | `reports/resume_bullets.md` | Ready-to-use resume bullets |
@@ -109,3 +111,4 @@ streamlit run dashboard/app.py
 - Uses synthetic data for reproducibility and privacy; it is not a production underwriting model.
 - The real-data benchmarks are downloaded from their public sources, cached locally, and reported separately from the synthetic lifecycle simulation.
 - Real deployment would require bureau data contracts, reject inference, fairness testing, adverse-action reason codes, regulatory review, and live champion/challenger monitoring.
+- The UCI benchmark has no observation timestamp, so it uses a stratified holdout rather than claiming invalid out-of-time validation.

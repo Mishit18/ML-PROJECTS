@@ -13,6 +13,7 @@ from credit_lifecycle.fairness import fairness_by_group
 from credit_lifecycle.features import infer_feature_spec, temporal_split
 from credit_lifecycle.monitoring import population_stability_index, score_band
 from credit_lifecycle.policy import select_policy, threshold_frontier
+from credit_lifecycle.real_data import expected_calibration_error
 
 
 def test_data_generation_has_expected_targets_and_size():
@@ -54,3 +55,12 @@ def test_policy_and_fairness_outputs_are_well_formed():
     assert 0 < policy["approval_rate"] <= 1
     assert fairness["dimension"].nunique() >= 4
     assert {"approval_rate_ratio_vs_max", "adverse_impact_watch"}.issubset(fairness.columns)
+
+
+def test_expected_calibration_error_rewards_calibrated_probabilities():
+    outcomes = np.array([0, 0, 1, 1])
+    calibrated = np.array([0.05, 0.10, 0.90, 0.95])
+    reversed_scores = 1 - calibrated
+    assert expected_calibration_error(outcomes, calibrated, bins=4) < expected_calibration_error(
+        outcomes, reversed_scores, bins=4
+    )
