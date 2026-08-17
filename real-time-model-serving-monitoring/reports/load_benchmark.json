@@ -1,0 +1,22 @@
+{
+  "requests": 500,
+  "successful_requests": 500,
+  "failures": 0,
+  "error_rate_pct": 0.0,
+  "concurrency": 16,
+  "throughput_rps": 28.4248,
+  "avg_ms": 559.3501,
+  "p50_ms": 557.5749,
+  "p95_ms": 682.6008,
+  "p99_ms": 795.1476,
+  "max_ms": 950.8604,
+  "wall_seconds": 17.5903,
+  "url": "http://127.0.0.1:8765/predict",
+  "warmup_requests": 25,
+  "environment": {
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.9",
+    "client": "requests.Session per worker thread",
+    "server": "single local Uvicorn process"
+  }
+}

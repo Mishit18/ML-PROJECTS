@@ -10,6 +10,7 @@ Verified locally:
 - Pytest suite passes 11/11 tests covering API endpoints, model loading, monitoring, drift checks, and governance utilities.
 - Versioned RandomForest model reaches 94.74% accuracy, 99.34% ROC-AUC, and 95.83% F1 on the held-out test split.
 - Governance readiness report records p50 latency 9.10 ms, p95 latency 11.06 ms, severe PSI drift detection, and safe shadow-model agreement.
+- Concurrent load harness reports throughput, p50/p95/p99 latency, error rate, and wall time with committed JSON evidence.
 - Project demonstrates model serving, MLOps monitoring, request validation, model-card governance, Docker packaging, and production-style API design.
 
 ## Why This Project Exists
@@ -74,11 +75,21 @@ curl -X POST http://localhost:8000/batch_predict ^
   -d @examples/batch_request.json
 ```
 
-Latency benchmark:
+Concurrent load benchmark (start the API first):
 
 ```bash
-python scripts/benchmark_api.py --url http://localhost:8000/predict --requests 100
+python scripts/benchmark_api.py --requests 1000 --concurrency 16 --warmup 25
 ```
+
+The benchmark writes `reports/load_benchmark.json`; results describe the local test environment and are not a cloud SLO.
+
+Latest reproducible local run (`500` requests, concurrency `16`, single Uvicorn process):
+
+- `500/500` successful requests and `0.0%` error rate
+- `28.42 requests/second` throughput
+- `557.57 ms` p50, `682.60 ms` p95, and `795.15 ms` p99 end-to-end client latency
+
+These figures intentionally include HTTP serialization, local scheduling, and model inference. They are evidence for load behavior on the recorded machine, not a production capacity claim.
 
 ## API Endpoints
 
