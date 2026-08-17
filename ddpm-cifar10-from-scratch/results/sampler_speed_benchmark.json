@@ -1,0 +1,24 @@
+{
+  "checkpoint": "checkpoint_0770.pt",
+  "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "batch_size": 64,
+  "repeats": 3,
+  "warmup_batches_per_setting": 1,
+  "ema": {
+    "ddim_25_samples_per_second_mean": 21.37,
+    "ddim_25_samples_per_second_std": 0.12,
+    "ddim_50_samples_per_second_mean": 10.67,
+    "ddim_50_samples_per_second_std": 0.07,
+    "ddim_100_samples_per_second_mean": 5.36,
+    "ddim_100_samples_per_second_std": 0.00
+  },
+  "raw": {
+    "ddim_25_samples_per_second_mean": 21.41,
+    "ddim_25_samples_per_second_std": 0.01,
+    "ddim_50_samples_per_second_mean": 10.65,
+    "ddim_50_samples_per_second_std": 0.05,
+    "ddim_100_samples_per_second_mean": 5.27,
+    "ddim_100_samples_per_second_std": 0.02
+  },
+  "claim_boundary": "Throughput benchmark only; the reported 50,000-sample FID/IS remains EMA DDIM-50."
+}

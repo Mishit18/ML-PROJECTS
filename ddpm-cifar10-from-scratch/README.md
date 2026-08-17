@@ -4,7 +4,7 @@ PyTorch implementation of a Denoising Diffusion Probabilistic Model (DDPM) for u
 
 ## Final Evaluation
 
-The 71.03M-parameter U-Net completed 300,000 optimizer steps. Evaluating the EMA checkpoint with DDIM-50 on 50,000 generated samples produced **FID 10.0958** and **Inception Score 8.7801 +/- 0.0958** at approximately **10 samples/second**. Reproducible JSON, CSV, and log evidence is stored under `runs/cifar10_rtx4060_best/metrics/`.
+The 71.03M-parameter U-Net completed 300,000 optimizer steps. Evaluating the EMA checkpoint with DDIM-50 on 50,000 generated samples produced **FID 10.0958** and **Inception Score 8.7801 +/- 0.0958** at approximately **10 samples/second**. A warm-started three-repeat benchmark measured **21.37 +/- 0.12**, **10.67 +/- 0.07**, and **5.36 +/- 0.00 samples/second** for EMA DDIM-25/50/100. Reproducible summaries are committed under `results/`.
 
 ## Project Highlights
 

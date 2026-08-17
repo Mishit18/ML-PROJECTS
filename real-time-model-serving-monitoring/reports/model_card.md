@@ -1,35 +1,39 @@
-# Model Card - Breast Cancer Risk Classifier
+# Model Card - Home Credit Default Risk
 
 ## Intended Use
 
-Demonstration model for real-time serving, prediction logging, latency monitoring, and feature-drift checks. It is not a clinical product.
+Calibrated probability-of-default inference for a reproducible ML serving and monitoring demonstration. It is not a lending decision system.
 
-## Model
+## Data and Model
 
-- Algorithm: RandomForestClassifier
-- Model version: rf-breast-cancer-20260807204104
-- Feature count: 30
-- Training rows: 455
-- Test rows: 114
+- Source: Home Credit Default Risk public competition data
+- Applications: 307,511
+- Behavioral records aggregated: 16,992,043
+- Training rows: 215,257
+- Validation rows: 46,127
+- Test rows: 46,127
+- Numeric features: 51
+- Algorithm: LightGBMClassifier with isotonic calibration
 
-## Test Metrics
+## Held-out Test Metrics
 
 | Metric | Value |
 |---|---:|
-| accuracy | 0.9474 |
-| roc_auc | 0.9934 |
-| f1 | 0.9583 |
-| precision | 0.9583 |
-| recall | 0.9583 |
+| roc_auc | 0.7775 |
+| pr_auc | 0.2562 |
+| ks | 0.4120 |
+| brier_score | 0.0667 |
+| ece_10bin | 0.0025 |
 
-## Monitoring
+## Monitoring and Governance
 
-- Prediction requests are logged to `reports/prediction_log.jsonl`.
-- Latency is tracked in memory and exposed through `/monitor/latency`.
-- Feature drift is measured with population stability index through `/monitor/drift`.
+- Request validation and structured prediction logging.
+- p50/p95 latency telemetry and PSI feature-drift monitoring.
+- Shadow-model agreement and retraining-candidate decision endpoints.
+- Protected gender attribute excluded from model features.
 
 ## Limitations
 
-- Public built-in dataset; no private production data.
-- Drift detection is monitoring only and does not automatically retrain the model.
-- This project demonstrates deployment discipline rather than state-of-the-art modeling.
+- Public competition data may not represent a current lending population.
+- The API demonstrates engineering controls; it does not make autonomous credit decisions.
+- Expected loss and approval policies require institution-specific validation before use.

@@ -1,0 +1,2 @@
+lm-eval==0.4.8
+sentencepiece==0.2.2

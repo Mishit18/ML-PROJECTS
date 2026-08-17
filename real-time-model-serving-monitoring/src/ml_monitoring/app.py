@@ -21,9 +21,9 @@ from .schemas import (
 
 
 app = FastAPI(
-    title="Real-Time Model Serving and Monitoring Pipeline",
-    version="1.0.0",
-    description="FastAPI inference service with logging, latency telemetry, and PSI drift checks.",
+    title="Home Credit ML Serving and Monitoring",
+    version="2.0.0",
+    description="Calibrated default-risk inference with logging, latency telemetry, and PSI drift checks.",
 )
 
 model_service = ModelService()

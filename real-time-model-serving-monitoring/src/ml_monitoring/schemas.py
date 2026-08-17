@@ -22,8 +22,8 @@ class BatchPredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     prediction: int
     label: str
-    probability_malignant: float
-    probability_benign: float
+    probability_default: float
+    probability_non_default: float
     model_version: str
     latency_ms: float
 

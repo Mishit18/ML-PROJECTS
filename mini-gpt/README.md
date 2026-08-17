@@ -155,7 +155,7 @@ The current generated evidence page is [reports/PROJECT_EVIDENCE.md](reports/PRO
 
 | Run | Dataset | Train loss | Val loss | Perplexity | Tokens/sec | Notes |
 |---|---:|---:|---:|---:|---:|---|
-| `small_tinystories_continue_low_lr` | TinyStories | 1.6100 | 2.2848 | 9.82 | 46,425.9 eval tok/s | Continued from best 20M-run checkpoint; `model_best.pt`, synthetic=false |
+| `small_tinystories_continue_low_lr` | TinyStories | 1.6100 | 2.2848 | 9.82 | 47,823.9 eval tok/s | Continued from best 20M-run checkpoint; 95% batch-bootstrap PPL CI 9.20-10.48, `model_best.pt`, synthetic=false |
 | `small_tinystories_20m` | TinyStories | 1.9133 | 2.3053 | 10.03 | 46,689.6 eval tok/s | Best epoch-15 checkpoint from 20-epoch run; final epoch overfit to PPL 10.52 |
 | `small_tinystories` | TinyStories | 2.7068 | 2.6565 | 14.25 | 47,119.0 eval tok/s | 5-epoch small config, synthetic=false |
 | `small_wikitext2` | WikiText-2 | 7.0267 | 7.2372 | 1,390.22 | 16,197.5 eval tok/s | 3-epoch small config, synthetic=false |
@@ -170,7 +170,7 @@ Baseline comparison on TinyStories at the same 5-epoch small-model budget:
 
 Modern decoder reduced validation perplexity from `19.49` to `14.25` at the same small-model budget, a `26.9%` relative reduction.
 
-Low-LR continuation improved the best TinyStories checkpoint from PPL `10.03` to `9.82`, crossing the sub-10 target.
+Low-LR continuation improved the best TinyStories checkpoint from PPL `10.03` to `9.82`, with a 2,000-resample batch-bootstrap 95% interval of `9.20-10.48` on 99,625 validation tokens.
 
 Focused 3-epoch ablations:
 

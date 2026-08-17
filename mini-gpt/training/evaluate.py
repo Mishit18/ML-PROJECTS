@@ -9,6 +9,7 @@ import time
 
 import torch
 import yaml
+import numpy as np
 from tqdm import tqdm
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -20,11 +21,13 @@ from tokenizer.tokenizer import create_tokenizer
 
 
 @torch.no_grad()
-def evaluate_model(model, val_loader, device):
+def evaluate_model(model, val_loader, device, bootstrap_samples=1000, seed=42):
     model.eval()
     total_loss = 0.0
     total_tokens = 0
     start = time.perf_counter()
+    batch_losses = []
+    batch_tokens = []
 
     for batch in tqdm(val_loader, desc="Evaluating", leave=False):
         input_ids = batch["input_ids"].to(device)
@@ -38,14 +41,28 @@ def evaluate_model(model, val_loader, device):
             continue
         total_loss += outputs["loss"].item() * valid_tokens
         total_tokens += valid_tokens
+        batch_losses.append(outputs["loss"].item())
+        batch_tokens.append(valid_tokens)
 
     elapsed = time.perf_counter() - start
     val_loss = total_loss / max(1, total_tokens)
+    rng = np.random.default_rng(seed)
+    indices = np.arange(len(batch_losses))
+    bootstrap_perplexities = []
+    for _ in range(bootstrap_samples):
+        sample = rng.choice(indices, size=len(indices), replace=True)
+        sampled_tokens = sum(batch_tokens[index] for index in sample)
+        sampled_loss = sum(batch_losses[index] * batch_tokens[index] for index in sample) / sampled_tokens
+        bootstrap_perplexities.append(math.exp(min(20, sampled_loss)))
+    ci_low, ci_high = np.percentile(bootstrap_perplexities, [2.5, 97.5])
     return {
         "val_loss": val_loss,
         "perplexity": math.exp(min(20, val_loss)),
         "tokens_evaluated": total_tokens,
         "tokens_per_sec": total_tokens / elapsed if elapsed > 0 else 0.0,
+        "perplexity_bootstrap_ci_95": [float(ci_low), float(ci_high)],
+        "bootstrap_samples": bootstrap_samples,
+        "validation_batches": len(batch_losses),
     }
 
 
@@ -68,6 +85,7 @@ def main():
     parser.add_argument("--batch-size", type=int, default=None)
     parser.add_argument("--output", default="reports/evaluation.json")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--bootstrap-samples", type=int, default=1000)
     parser.add_argument("--allow-synthetic-fallback", action="store_true",
                         help="Allow synthetic fallback only for smoke testing when dataset download fails")
     args = parser.parse_args()
@@ -91,7 +109,9 @@ def main():
         batch_size=args.batch_size or config["training"]["batch_size"],
         max_length=config["model"]["max_seq_len"],
     )
-    metrics = evaluate_model(model, val_loader, device)
+    metrics = evaluate_model(
+        model, val_loader, device, bootstrap_samples=args.bootstrap_samples, seed=args.seed
+    )
     metrics.update({"dataset": args.dataset, "checkpoint": args.checkpoint, "synthetic": data_metadata["synthetic"]})
 
     os.makedirs(os.path.dirname(args.output), exist_ok=True)

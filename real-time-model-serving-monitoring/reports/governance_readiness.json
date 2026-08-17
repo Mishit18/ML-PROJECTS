@@ -1,207 +1,555 @@
 {
-  "drift": {
-    "rows_checked": 50,
-    "drifted_features": 24,
-    "max_psi": 1.252952,
-    "status": "severe",
+  "stable_drift": {
+    "rows_checked": 2000,
+    "drifted_features": 0,
+    "max_psi": 0.0,
+    "status": "stable",
     "features": [
       {
-        "feature": "mean_radius",
-        "psi": 0.156722,
-        "status": "moderate"
-      },
-      {
-        "feature": "mean_texture",
-        "psi": 0.112536,
-        "status": "moderate"
-      },
-      {
-        "feature": "mean_perimeter",
-        "psi": 1.252952,
-        "status": "severe"
-      },
-      {
-        "feature": "mean_area",
-        "psi": 0.120935,
-        "status": "moderate"
-      },
-      {
-        "feature": "mean_smoothness",
-        "psi": 0.084183,
+        "feature": "CNT_CHILDREN",
+        "psi": 0.0,
         "status": "stable"
       },
       {
-        "feature": "mean_compactness",
-        "psi": 0.08467,
+        "feature": "AMT_INCOME_TOTAL",
+        "psi": 0.0,
         "status": "stable"
       },
       {
-        "feature": "mean_concavity",
-        "psi": 0.115444,
-        "status": "moderate"
-      },
-      {
-        "feature": "mean_concave_points",
-        "psi": 0.174965,
-        "status": "moderate"
-      },
-      {
-        "feature": "mean_symmetry",
-        "psi": 0.112773,
-        "status": "moderate"
-      },
-      {
-        "feature": "mean_fractal_dimension",
-        "psi": 0.151037,
-        "status": "moderate"
-      },
-      {
-        "feature": "radius_error",
-        "psi": 1.252894,
-        "status": "severe"
-      },
-      {
-        "feature": "texture_error",
-        "psi": 1.215046,
-        "status": "severe"
-      },
-      {
-        "feature": "perimeter_error",
-        "psi": 0.223694,
-        "status": "moderate"
-      },
-      {
-        "feature": "area_error",
-        "psi": 0.203539,
-        "status": "moderate"
-      },
-      {
-        "feature": "smoothness_error",
-        "psi": 0.272866,
-        "status": "severe"
-      },
-      {
-        "feature": "compactness_error",
-        "psi": 0.075515,
+        "feature": "AMT_CREDIT",
+        "psi": 0.0,
         "status": "stable"
       },
       {
-        "feature": "concavity_error",
-        "psi": 0.100628,
-        "status": "moderate"
-      },
-      {
-        "feature": "concave_points_error",
-        "psi": 0.143723,
-        "status": "moderate"
-      },
-      {
-        "feature": "symmetry_error",
-        "psi": 0.116332,
-        "status": "moderate"
-      },
-      {
-        "feature": "fractal_dimension_error",
-        "psi": 0.246645,
-        "status": "moderate"
-      },
-      {
-        "feature": "worst_radius",
-        "psi": 0.036233,
+        "feature": "AMT_ANNUITY",
+        "psi": 0.0,
         "status": "stable"
       },
       {
-        "feature": "worst_texture",
-        "psi": 0.272,
-        "status": "severe"
-      },
-      {
-        "feature": "worst_perimeter",
-        "psi": 0.117687,
-        "status": "moderate"
-      },
-      {
-        "feature": "worst_area",
-        "psi": 0.072545,
+        "feature": "AMT_GOODS_PRICE",
+        "psi": 0.0,
         "status": "stable"
       },
       {
-        "feature": "worst_smoothness",
-        "psi": 0.385379,
-        "status": "severe"
-      },
-      {
-        "feature": "worst_compactness",
-        "psi": 0.160917,
-        "status": "moderate"
-      },
-      {
-        "feature": "worst_concavity",
-        "psi": 0.148732,
-        "status": "moderate"
-      },
-      {
-        "feature": "worst_concave_points",
-        "psi": 0.087394,
+        "feature": "REGION_POPULATION_RELATIVE",
+        "psi": 0.0,
         "status": "stable"
       },
       {
-        "feature": "worst_symmetry",
-        "psi": 0.269375,
-        "status": "severe"
+        "feature": "DAYS_BIRTH",
+        "psi": 0.0,
+        "status": "stable"
       },
       {
-        "feature": "worst_fractal_dimension",
-        "psi": 0.137058,
-        "status": "moderate"
+        "feature": "DAYS_EMPLOYED",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_REGISTRATION",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_ID_PUBLISH",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "OWN_CAR_AGE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "CNT_FAM_MEMBERS",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "REGION_RATING_CLIENT",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "REGION_RATING_CLIENT_W_CITY",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "HOUR_APPR_PROCESS_START",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "EXT_SOURCE_1",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "EXT_SOURCE_2",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "EXT_SOURCE_3",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "OBS_30_CNT_SOCIAL_CIRCLE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DEF_30_CNT_SOCIAL_CIRCLE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_LAST_PHONE_CHANGE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "age_years",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "employment_years",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "credit_income_ratio",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "annuity_income_ratio",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "credit_term_proxy",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "external_score_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_credits",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_active_credits",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_overdue_credits",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_days_credit_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_days_credit_min",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_credit_sum",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_debt_sum",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_overdue_sum",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_applications",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_approval_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_refusal_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_days_decision_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_credit_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_annuity_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_payment_count_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_credit_gap_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_count",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_late_count",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_underpaid_count",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_late_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_underpaid_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_days_late_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_payment_ratio_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_debt_ratio",
+        "psi": 0.0,
+        "status": "stable"
       }
     ]
   },
-  "latency": {
+  "shifted_fixture_drift": {
+    "rows_checked": 2000,
+    "drifted_features": 5,
+    "max_psi": 10.490172,
+    "status": "severe",
+    "features": [
+      {
+        "feature": "CNT_CHILDREN",
+        "psi": 10.490172,
+        "status": "severe"
+      },
+      {
+        "feature": "AMT_INCOME_TOTAL",
+        "psi": 8.760707,
+        "status": "severe"
+      },
+      {
+        "feature": "AMT_CREDIT",
+        "psi": 9.26112,
+        "status": "severe"
+      },
+      {
+        "feature": "AMT_ANNUITY",
+        "psi": 8.528336,
+        "status": "severe"
+      },
+      {
+        "feature": "AMT_GOODS_PRICE",
+        "psi": 8.887039,
+        "status": "severe"
+      },
+      {
+        "feature": "REGION_POPULATION_RELATIVE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_BIRTH",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_EMPLOYED",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_REGISTRATION",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_ID_PUBLISH",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "OWN_CAR_AGE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "CNT_FAM_MEMBERS",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "REGION_RATING_CLIENT",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "REGION_RATING_CLIENT_W_CITY",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "HOUR_APPR_PROCESS_START",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "EXT_SOURCE_1",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "EXT_SOURCE_2",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "EXT_SOURCE_3",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "OBS_30_CNT_SOCIAL_CIRCLE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DEF_30_CNT_SOCIAL_CIRCLE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "DAYS_LAST_PHONE_CHANGE",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "age_years",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "employment_years",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "credit_income_ratio",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "annuity_income_ratio",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "credit_term_proxy",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "external_score_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_credits",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_active_credits",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_overdue_credits",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_days_credit_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_days_credit_min",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_credit_sum",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_debt_sum",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_overdue_sum",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_applications",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_approval_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_refusal_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_days_decision_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_credit_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_annuity_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_payment_count_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "previous_credit_gap_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_count",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_late_count",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_underpaid_count",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_late_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_underpaid_rate",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_days_late_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "installment_payment_ratio_mean",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "feature": "bureau_debt_ratio",
+        "psi": 0.0,
+        "status": "stable"
+      }
+    ]
+  },
+  "latency_fixture": {
     "request_count": 5,
     "avg_ms": 9.36,
     "p50_ms": 9.1,
     "p95_ms": 11.06,
     "max_ms": 11.2
   },
-  "retraining_decision": {
+  "latency_fixture_note": "Deterministic governance fixture; use load_benchmark.json for measured HTTP latency.",
+  "retraining_decision_on_shifted_fixture": {
     "action": "collect_more_traffic",
     "reasons": [
-      "max_psi_breach",
-      "feature_drift_share_breach"
+      "max_psi_breach"
     ],
     "severe_features": [
-      "mean_perimeter",
-      "radius_error",
-      "texture_error",
-      "smoothness_error",
-      "worst_texture",
-      "worst_smoothness",
-      "worst_symmetry"
+      "CNT_CHILDREN",
+      "AMT_INCOME_TOTAL",
+      "AMT_CREDIT",
+      "AMT_ANNUITY",
+      "AMT_GOODS_PRICE"
     ],
-    "moderate_features": [
-      "mean_radius",
-      "mean_texture",
-      "mean_area",
-      "mean_concavity",
-      "mean_concave_points",
-      "mean_symmetry",
-      "mean_fractal_dimension",
-      "perimeter_error",
-      "area_error",
-      "concavity_error",
-      "concave_points_error",
-      "symmetry_error",
-      "fractal_dimension_error",
-      "worst_perimeter",
-      "worst_compactness",
-      "worst_concavity",
-      "worst_fractal_dimension"
-    ],
-    "drifted_feature_share": 0.8,
+    "moderate_features": [],
+    "drifted_feature_share": 0.098,
     "request_count": 5
   },
-  "shadow_agreement": {
+  "shadow_agreement_fixture": {
     "rows_compared": 3,
     "mean_abs_probability_delta": 0.023333,
     "max_abs_probability_delta": 0.03,

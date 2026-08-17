@@ -25,6 +25,7 @@
 - Final evaluated EMA checkpoint and DDIM-50 sample grids
 - 50,000-sample metrics JSON, CSV, and evaluation logs
 - Tests for config, diffusion process, and U-Net components
+- Repeated DDIM-25/50/100 throughput benchmark with warmup and mean/std reporting
 
 ## Resume-Safe Claim
 

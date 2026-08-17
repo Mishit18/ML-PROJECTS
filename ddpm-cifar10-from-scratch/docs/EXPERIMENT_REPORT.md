@@ -20,13 +20,13 @@
 
 The final evaluation used the EMA checkpoint, DDIM with 50 denoising steps, and 50,000 generated samples.
 
+A repeated sampler benchmark on the same RTX 4060 measured EMA throughput at 21.37 +/- 0.12, 10.67 +/- 0.07, and 5.36 +/- 0.00 samples/second for DDIM-25/50/100. Each setting used one warmup batch followed by three timed batch-64 runs. This is a speed comparison only; the 50,000-sample quality metric remains DDIM-50.
+
 | Run | Weights | Sampler | Steps | Samples | FID | IS mean | IS std | Samples/sec |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | best cosine | EMA | DDIM | 50 | 50,000 | 10.0958 | 8.7801 | 0.0958 | 9.999 |
-| best cosine | EMA | DDPM | 1000 | 50,000 | pending | pending | pending | pending |
-| best cosine | raw | DDIM | 50 | 50,000 | pending | pending | pending | pending |
-| linear ablation | EMA | DDIM | 50 | 50,000 | pending | pending | pending | pending |
-| small model | EMA | DDIM | 50 | 50,000 | pending | pending | pending | pending |
+
+Raw-weight quality, DDPM-1000 quality, and alternative-architecture FID runs are intentionally not reported because equivalent 50,000-sample evaluations have not been completed.
 
 ## Reproduction Commands
 

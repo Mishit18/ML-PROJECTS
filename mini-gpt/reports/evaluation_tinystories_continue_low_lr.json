@@ -2,8 +2,14 @@
   "val_loss": 2.2847957008103355,
   "perplexity": 9.823679049322966,
   "tokens_evaluated": 99625,
-  "tokens_per_sec": 46425.91951749358,
+  "tokens_per_sec": 47823.93074460492,
+  "perplexity_bootstrap_ci_95": [
+    9.196255296604368,
+    10.481404339990132
+  ],
+  "bootstrap_samples": 2000,
+  "validation_batches": 63,
   "dataset": "tinystories",
-  "checkpoint": "checkpoints\\small_tinystories_continue_low_lr\\model_best.pt",
+  "checkpoint": "checkpoints/small_tinystories_continue_low_lr/model_best.pt",
   "synthetic": false
 }

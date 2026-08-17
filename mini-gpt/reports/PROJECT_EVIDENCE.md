@@ -6,7 +6,9 @@ This report is generated from local JSON/CSV artifacts. Final rows use trained-c
 
 | Run | Dataset | Synthetic | Train loss | Val loss | Perplexity | Eval tok/s | Tokens trained |
 |---|---|---:|---:|---:|---:|---:|---:|
-| small_tinystories_continue_low_lr | tinystories | False | 1.6100 | 2.2848 | 9.82 | 46425.9 | 1018517 |
+| small_tinystories_continue_low_lr | tinystories | False | 1.6100 | 2.2848 | 9.82 | 47823.9 | 1018517 |
+
+The best checkpoint was reevaluated on 99,625 validation tokens with 2,000 deterministic batch-bootstrap resamples; the 95% perplexity interval was 9.20-10.48.
 | small_wikitext2 | wikitext-2 | False | 7.0267 | 7.2372 | 1390.22 | 16197.5 | 447594 |
 | small_tinystories | tinystories | False | 2.7068 | 2.6565 | 14.25 | 47119.0 | 5092585 |
 | small_tinystories_20m | tinystories | False | 1.9133 | 2.3053 | 10.03 | 46689.6 | 15277755 |

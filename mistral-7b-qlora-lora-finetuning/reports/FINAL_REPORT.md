@@ -109,6 +109,10 @@ Observed pattern:
 
 Honest conclusion: this is a strong PEFT systems project, not a claim that the model became a domain expert.
 
+## ARC-Easy Diagnostic
+
+Using `lm-eval` 0.4.8 on a fixed-seed 100-item zero-shot ARC-Easy sample, the adapter reached 79% length-normalized accuracy vs 76% for the base model. Raw accuracy moved from 78% to 75%. Because the sample standard errors are about four percentage points, this mixed result is evidence of task-level evaluation, not a statistically reliable reasoning improvement. Full details and raw outputs are in `reports/ARC_EASY_DIAGNOSTIC.md`.
+
 ## Reproducibility
 
 Train final adapter:
@@ -179,7 +183,7 @@ python -m src.batch_generate \
 
 ## Limitations
 
-- No MMLU/AlpacaEval score was run locally because Windows long-path issues blocked `lm-eval` installation in the original environment.
+- The standard harness was installed through a short Windows target path; only a 100-item ARC-Easy diagnostic was run, not a full benchmark suite.
 - Alpaca-cleaned is useful for instruction formatting but not ideal for factual domain expertise.
 - The ablations are short 100-step comparisons, not fully converged sweeps.
 - Qualitative outputs show that instruction tuning improved response style more than technical factuality.

@@ -24,6 +24,7 @@ Verified locally:
 - Final 1,200-step QLoRA run trained 6,815,744 adapter parameters, only 0.0939% of the 7.25B-class base model.
 - Held-out validation perplexity improved from 4.9675 to 2.6190 across 1,000 validation samples, a 47.28% reduction.
 - Real 7B ablations compare rank-4, rank-8, rank-16, and q/v-only target modules at 100 steps.
+- A fixed-seed 100-item ARC-Easy diagnostic recorded 79% normalized accuracy for the adapter vs 76% for the base, while raw accuracy moved from 78% to 75%; the mixed result is reported without claiming a reasoning gain.
 - Project is strongest as a PEFT systems and evaluation project, not as a claim of production-safe LLM deployment.
 
 ## Recommendation

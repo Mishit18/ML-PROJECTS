@@ -7,11 +7,7 @@ client = TestClient(app)
 
 
 def sample_features():
-    return [
-        17.99, 10.38, 122.8, 1001.0, 0.1184, 0.2776, 0.3001, 0.1471, 0.2419, 0.07871,
-        1.095, 0.9053, 8.589, 153.4, 0.006399, 0.04904, 0.05373, 0.01587, 0.03003, 0.006193,
-        25.38, 17.33, 184.6, 2019.0, 0.1622, 0.6656, 0.7119, 0.2654, 0.4601, 0.1189,
-    ]
+    return model_service.baseline_rows[0]
 
 
 def test_health_endpoint():
@@ -20,15 +16,15 @@ def test_health_endpoint():
     body = response.json()
     assert body["status"] == "ok"
     assert body["model_loaded"] is True
-    assert body["feature_count"] == 30
+    assert body["feature_count"] >= 50
 
 
 def test_predict_endpoint():
     response = client.post("/predict", json={"features": sample_features()})
     assert response.status_code == 200
     body = response.json()
-    assert body["label"] in {"malignant", "benign"}
-    assert 0 <= body["probability_malignant"] <= 1
+    assert body["label"] in {"default", "non_default"}
+    assert 0 <= body["probability_default"] <= 1
     assert body["latency_ms"] >= 0
 
 
@@ -52,7 +48,7 @@ def test_drift_endpoint():
     assert response.status_code == 200
     body = response.json()
     assert body["rows_checked"] == 10
-    assert len(body["features"]) == 30
+    assert len(body["features"]) == len(model_service.feature_names)
 
 
 def test_retraining_decision_endpoint():

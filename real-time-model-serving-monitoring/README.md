@@ -1,156 +1,66 @@
-# Real-Time Model Serving and Monitoring Pipeline
+# Home Credit ML Serving and Monitoring
 
-Production-style ML serving project focused on the parts interviewers ask for most: reliable inference APIs, model artifacts, request validation, latency tracking, prediction logging, and basic drift monitoring.
+Production-style FastAPI service for a calibrated LightGBM probability-of-default model trained on the public Home Credit Default Risk dataset. The project connects real-data feature engineering, held-out model evaluation, artifact versioning, request validation, latency telemetry, PSI drift detection, shadow evaluation, and retraining governance.
 
-This project is intentionally lightweight and reproducible on a laptop. The model is a scikit-learn breast-cancer risk classifier trained from a built-in dataset so the serving, monitoring, and testing workflow can be verified without private data or GPU access.
+## Verified Evidence
 
-## Tech Resume Screening Summary
+| Item | Result |
+|---|---:|
+| Applications | 307,511 |
+| Aggregated bureau, prior-application, and installment records | 16,992,043 |
+| Numeric deployment features | 51 |
+| Held-out test applications | 46,127 |
+| Calibrated ROC-AUC | 0.7775 |
+| KS statistic | 0.4120 |
+| Expected calibration error, 10 bins | 0.0025 |
+| Automated tests | 13 passing |
 
-Verified locally:
-- Pytest suite passes 11/11 tests covering API endpoints, model loading, monitoring, drift checks, and governance utilities.
-- Versioned RandomForest model reaches 94.74% accuracy, 99.34% ROC-AUC, and 95.83% F1 on the held-out test split.
-- Governance readiness report records p50 latency 9.10 ms, p95 latency 11.06 ms, severe PSI drift detection, and safe shadow-model agreement.
-- Concurrent load harness reports throughput, p50/p95/p99 latency, error rate, and wall time with committed JSON evidence.
-- Project demonstrates model serving, MLOps monitoring, request validation, model-card governance, Docker packaging, and production-style API design.
+The split is stratified into training, calibration, and test partitions. Isotonic calibration is fitted only on the validation partition. `CODE_GENDER` is retained for offline fairness analysis in the source project but excluded from deployment features.
 
-## Why This Project Exists
+## Capabilities
 
-Most ML portfolio projects stop at model accuracy. This project demonstrates the next layer:
+- `POST /predict` and `POST /batch_predict` for calibrated default-risk inference.
+- `GET /health` for model version and feature-contract checks.
+- `POST /monitor/drift` for per-feature PSI against 2,000 sampled training rows.
+- `GET /monitor/latency` for average, p50, p95, and maximum inference latency.
+- `POST /monitor/shadow_agreement` for champion/challenger probability comparison.
+- `POST /monitor/retraining_decision` for evidence-based monitoring actions.
+- Structured prediction logs, Pydantic validation, Docker packaging, and pytest coverage.
 
-- Real-time and batch inference through FastAPI
-- Versioned model artifact and metadata
-- Input validation with Pydantic
-- Prediction logging for auditability
-- p50 / p95 latency reporting
-- Feature-drift monitoring using population stability index
-- Data-quality checks for missing, invalid, and out-of-range values
-- Dockerized reproducibility
-- Automated tests for serving and monitoring paths
+## Reproduce
 
-## Repository Structure
-
-```text
-real-time-model-serving-monitoring/
-├── artifacts/                 # Generated model and metadata
-├── examples/                  # Example API payloads
-├── reports/                   # Generated model card and monitoring outputs
-├── scripts/
-│   ├── benchmark_api.py       # Latency benchmark against running API
-│   └── train_model.py         # Reproducible training + artifact generation
-├── src/ml_monitoring/
-│   ├── app.py                 # FastAPI app
-│   ├── model.py               # Artifact loading + prediction service
-│   ├── monitoring.py          # Drift, latency, and logging utilities
-│   └── schemas.py             # Request/response schemas
-├── tests/                     # Unit and API tests
-├── Dockerfile
-└── requirements.txt
-```
-
-## Quickstart
+The official Kaggle archive is intentionally not committed. Accept the Home Credit competition rules and download `home-credit-default-risk.zip`, then run:
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate
 pip install -r requirements.txt
-
-python scripts/train_model.py
-pytest -q
+python scripts/train_model.py --archive /path/to/home-credit-default-risk.zip
+python -m pytest -q
 uvicorn src.ml_monitoring.app:app --host 0.0.0.0 --port 8000
 ```
 
-Example request:
+In another shell:
 
 ```bash
-curl -X POST http://localhost:8000/predict ^
-  -H "Content-Type: application/json" ^
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
   -d @examples/sample_request.json
+
+python scripts/benchmark_api.py --requests 500 --concurrency 16 --warmup 25
 ```
 
-Batch request:
+The benchmark writes `reports/load_benchmark.json`. Results are local-machine measurements, not a cloud SLO.
 
-```bash
-curl -X POST http://localhost:8000/batch_predict ^
-  -H "Content-Type: application/json" ^
-  -d @examples/batch_request.json
-```
+Latest local run on a single Uvicorn process (`500` requests, concurrency `16`): **500/500 successful**, **198.04 requests/second**, **79.61 ms p50**, **105.20 ms p95**, and **0% errors**.
 
-Concurrent load benchmark (start the API first):
+## Artifacts
 
-```bash
-python scripts/benchmark_api.py --requests 1000 --concurrency 16 --warmup 25
-```
+- `artifacts/model.joblib`: LightGBM deployment model.
+- `artifacts/calibrator.joblib`: validation-only isotonic calibrator.
+- `artifacts/model_metadata.json`: version, feature contract, split sizes, and test metrics.
+- `artifacts/baseline_stats.json`: drift baseline and training medians.
+- `reports/model_card.md`: intended use, evaluation, governance, and limitations.
+- `examples/sample_request.json`: request matching the 51-feature contract.
 
-The benchmark writes `reports/load_benchmark.json`; results describe the local test environment and are not a cloud SLO.
+## Claim Boundary
 
-Latest reproducible local run (`500` requests, concurrency `16`, single Uvicorn process):
-
-- `500/500` successful requests and `0.0%` error rate
-- `28.42 requests/second` throughput
-- `557.57 ms` p50, `682.60 ms` p95, and `795.15 ms` p99 end-to-end client latency
-
-These figures intentionally include HTTP serialization, local scheduling, and model inference. They are evidence for load behavior on the recorded machine, not a production capacity claim.
-
-## API Endpoints
-
-| Endpoint | Purpose |
-|---|---|
-| `GET /health` | Model load status, version, and feature count |
-| `POST /predict` | Single real-time prediction |
-| `POST /batch_predict` | Batch inference |
-| `POST /monitor/drift` | Feature drift report against training baseline |
-| `GET /monitor/latency` | p50, p95, average latency and request count |
-
-## Generated Metrics
-
-Run `python scripts/train_model.py` to regenerate artifacts and metrics. Outputs:
-
-- `artifacts/model.joblib`
-- `artifacts/model_metadata.json`
-- `artifacts/baseline_stats.json`
-- `reports/model_card.md`
-
-The model card records test accuracy, ROC-AUC, F1, precision, recall, feature count, dataset size, and limitations.
-
-## Monitoring Design
-
-### Feature Drift
-
-The drift endpoint computes population stability index (PSI) for each feature against the training baseline. The default thresholds are:
-
-- `PSI < 0.10`: stable
-- `0.10 <= PSI < 0.25`: moderate drift
-- `PSI >= 0.25`: severe drift
-
-### Data Quality
-
-Requests are validated for:
-
-- Missing features
-- Non-numeric values
-- NaN / infinity
-- Batch-size bounds
-- Unexpected feature count
-
-### Latency
-
-Every prediction path records latency in milliseconds. The `/monitor/latency` endpoint reports request count, average, p50, p95, and max latency.
-
-## Docker
-
-```bash
-docker build -t ml-serving-monitoring .
-docker run -p 8000:8000 ml-serving-monitoring
-```
-
-## Resume Bullets
-
-- Built a FastAPI-based real-time ML serving pipeline with `/predict`, `/batch_predict`, `/health`, latency telemetry, request logging, and feature-drift monitoring for production-style model governance.
-- Versioned a scikit-learn classifier with reproducible training artifacts, model metadata, baseline feature statistics, and an auto-generated model card covering accuracy, ROC-AUC, F1, precision, recall, and limitations.
-- Implemented monitoring utilities for p50/p95 inference latency, PSI-based feature drift, and data-quality validation, with automated tests covering API, model loading, and monitoring logic.
-
-## Limitations
-
-- Uses a public built-in dataset for reproducibility, not private production data.
-- Drift detection is statistical monitoring, not automated retraining.
-- The model is intentionally lightweight; the project evaluates deployment and monitoring discipline rather than claiming state-of-the-art model performance.
+This is a reproducible public-data engineering demonstration, not a live lending system. It does not make autonomous credit decisions, establish a production SLO, or claim institutional policy validation.
