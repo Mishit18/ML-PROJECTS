@@ -11,6 +11,18 @@ def _pct(x: float) -> str:
     return f"{x * 100:.2f}%"
 
 
+def _benchmark_summary(real_benchmark: pd.DataFrame | None) -> str:
+    if real_benchmark is None or real_benchmark.empty:
+        return ""
+    real_best = real_benchmark.iloc[0]
+    dataset_name = real_best.get("dataset", "public credit-risk dataset")
+    return (
+        f"- Real {dataset_name} benchmark: {real_best['model']} ROC-AUC "
+        f"{real_best['roc_auc']:.3f}, KS {real_best['ks']:.3f} on "
+        f"{int(real_best['records']):,} public records\n"
+    )
+
+
 def write_plots(scored: pd.DataFrame, importance: pd.DataFrame, output_dir: Path, frontier: pd.DataFrame | None = None, fairness: pd.DataFrame | None = None) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     sns.set_theme(style="whitegrid")
@@ -88,10 +100,7 @@ def write_reports(
     severe_count = int((drift["status"] == "severe").sum())
     policy = policy or {}
     fairness_summary = fairness_summary or {}
-    real_line = ""
-    if real_benchmark is not None and not real_benchmark.empty:
-        real_best = real_benchmark.iloc[0]
-        real_line = f"- Real OpenML German Credit benchmark: {real_best['model']} ROC-AUC {real_best['roc_auc']:.3f}, KS {real_best['ks']:.3f} on {int(real_best['records']):,} public records\n"
+    real_line = _benchmark_summary(real_benchmark)
 
     executive = f"""# Executive Brief: Credit Risk and Customer Lifecycle Analytics
 

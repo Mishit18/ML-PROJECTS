@@ -11,7 +11,7 @@
 - Policy approval rate: 76.27%
 - Approved default rate: 4.20%
 - Declined default rate: 18.50%
-- Real OpenML German Credit benchmark: gradient_boosting ROC-AUC 0.775, KS 0.421 on 30,000 public records
+- Real UCI Default of Credit Card Clients benchmark: gradient_boosting ROC-AUC 0.775, KS 0.421 on 30,000 public records
 
 
 ## Business Interpretation

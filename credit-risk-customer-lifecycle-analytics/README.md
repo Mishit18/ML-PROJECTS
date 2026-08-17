@@ -94,6 +94,7 @@ credit-risk-customer-lifecycle-analytics/
 - Trained and compared scorecard-style logistic regression, gradient boosting, and random forest models with temporal validation, ROC-AUC, PR-AUC, KS, top-decile recall, and approval-policy simulation.
 - Designed DuckDB SQL analytics layer for risk-band policy, approval rate, realized default, churn, segment profitability, acquisition-channel quality, and monthly portfolio monitoring.
 - Added permutation explainability, adverse-action style reason codes, fairness diagnostics, PSI drift monitoring, threshold optimization, score-band governance, and risk-adjusted margin simulation to translate model outputs into underwriting and retention actions.
+- Validated gradient boosting on 30,000 real UCI credit-card customers, reaching ROC-AUC 0.775 and KS 0.421 with score-band calibration evidence.
 - Benchmarked the modeling workflow on OpenML German Credit data, achieving ROC-AUC 0.801 and KS 0.494 on 1,000 public credit-risk records.
 
 ## Dashboard
