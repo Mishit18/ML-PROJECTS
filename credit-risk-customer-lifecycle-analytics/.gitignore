@@ -7,3 +7,5 @@ data/*.parquet
 artifacts/*.joblib
 artifacts/*.json
 .cache/
+data/home-credit-default-risk.zip
+data/home_credit/

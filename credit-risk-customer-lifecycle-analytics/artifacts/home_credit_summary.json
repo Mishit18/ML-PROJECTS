@@ -1,0 +1,18 @@
+{
+  "applications": 307511,
+  "bureau_records": 1716428,
+  "previous_application_records": 1670214,
+  "installment_records": 13605401,
+  "bureau_customers": 305811,
+  "previous_application_customers": 338857,
+  "installment_customers": 339587,
+  "test_applications": 46127,
+  "features": 60,
+  "roc_auc": 0.7826419991411244,
+  "pr_auc": 0.26389810751303444,
+  "ks": 0.4208736928180279,
+  "brier_score": 0.06628824394215957,
+  "ece_10bin": 0.0024071180396702035,
+  "policy_approval_rate": 0.8222949682398595,
+  "policy_default_rate": 0.046585815976799366
+}
