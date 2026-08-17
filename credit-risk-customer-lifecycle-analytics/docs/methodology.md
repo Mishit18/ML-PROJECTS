@@ -1,33 +1,12 @@
 # Methodology
 
-## Data Design
+1. Load the official Home Credit competition archive without redistributing source data.
+2. Aggregate bureau credits, previous applications, and installment-payment behavior by applicant.
+3. Engineer 60 application, affordability, external-score, bureau, and repayment features.
+4. Create stratified train, validation, and untouched test partitions.
+5. Benchmark logistic regression against LightGBM; fit isotonic calibration only on validation scores.
+6. Evaluate ROC-AUC, PR-AUC, KS, Brier score, and 10-bin ECE on 46,127 test applications.
+7. Build the approval frontier in DuckDB and label 45% LGD expected-loss values as modeled.
+8. Export fairness and PSI stability diagnostics; exclude gender from model features.
 
-The dataset is generated to resemble unsecured lending and card portfolios. Features cover application quality, bureau risk, repayment behavior, utilization stress, product depth, digital engagement, acquisition source, and region.
-
-## Validation
-
-The split is temporal by `vintage_month`: earlier cohorts train the model and later cohorts test it. This is closer to production model validation than a random split because credit portfolios drift over time.
-
-## Modeling
-
-The pipeline compares:
-
-- Logistic regression as an interpretable scorecard baseline
-- Gradient boosting for non-linear interactions
-- Random forest for robust benchmark comparison
-
-## Metrics
-
-- ROC-AUC: rank-ordering quality
-- PR-AUC: performance under default-class imbalance
-- KS statistic: scorecard separation
-- Recall in riskiest decile: collections / underwriting usefulness
-- Top-20 policy precision and recall: approval or manual-review threshold behavior
-
-## Business Layer
-
-The project converts model probability into risk bands and a simulated approval policy. It then connects risk to churn, expected margin, acquisition channel quality, and customer segment profitability.
-
-## Monitoring
-
-Population stability index compares development-window features against the latest scoring month. PSI is reported as stable, moderate, or severe to support model governance.
+The source has no application timestamp, so this project does not claim out-of-time validation.

@@ -1,5 +1,0 @@
-model,brier_score,ece_10bin,roc_auc,roc_auc_ci_low,roc_auc_ci_high
-gradient_boosting,0.1356,0.01034,0.77483,0.76171,0.78875
-gradient_boosting_isotonic,0.13543,0.00838,0.77446,0.76113,0.78836
-gradient_boosting_sigmoid,0.13564,0.0136,0.77417,0.76105,0.78817
-logistic_scorecard,0.14558,0.04907,0.71553,0.70331,0.72953
