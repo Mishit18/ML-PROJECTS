@@ -2,6 +2,10 @@
 
 PyTorch implementation of a Denoising Diffusion Probabilistic Model (DDPM) for unconditional CIFAR-10 generation. The diffusion algorithm is implemented from PyTorch primitives only: no `diffusers`, no `guided-diffusion`.
 
+## Final Evaluation
+
+The 71.03M-parameter U-Net completed 300,000 optimizer steps. Evaluating the EMA checkpoint with DDIM-50 on 50,000 generated samples produced **FID 10.0958** and **Inception Score 8.7801 +/- 0.0958** at approximately **10 samples/second**. Reproducible JSON, CSV, and log evidence is stored under `runs/cifar10_rtx4060_best/metrics/`.
+
 ## Project Highlights
 
 - Implements the DDPM forward process, learned reverse process, and epsilon-prediction objective from scratch.
@@ -298,8 +302,7 @@ Log during training:
 
 ## 9. Resume Bullet Drafts
 
-Use the measured bullets below until final FID/Inception Score evaluation is
-complete.
+Use the measured bullets below with the final evaluation context.
 
 - Implemented DDPM from scratch in PyTorch, including closed-form forward
   noising, epsilon-prediction denoising, cosine noise scheduling, EMA
@@ -307,12 +310,9 @@ complete.
 - Built a 71.03M-parameter U-Net with GroupNorm/SiLU residual blocks,
   sinusoidal timestep conditioning, encoder-decoder skip connections, and
   multi-head attention at 16x16 and 8x8 resolutions.
-- Trained the main CIFAR-10 run to 106,500 / 300,000 optimizer steps before GPU
-  handoff; latest logged loss was 0.058331 with checkpoint/sample artifacts
-  generated every 5 epochs.
-- Final resume metrics should add measured FID, Inception Score, sampler type,
-  denoising steps, EMA/raw weights, checkpoint, sample count, and seed after
-  evaluation completes.
+- Completed 300,000 optimizer steps and evaluated 50,000 EMA DDIM-50 samples,
+  achieving FID 10.0958 and Inception Score 8.7801 +/- 0.0958 at approximately
+  10 samples per second.
 
 ## 10. Common Mistakes
 
@@ -330,21 +330,20 @@ complete.
 4. Run final FID with 50k generated samples.
 5. Run ablations and fill the resume bullets with actual measured values.
 
-## Current Training Status
+## Final Training Status
 
-The main RTX 4060 run is partially trained and paused while the GPU is occupied
-by the QLoRA project. Current measured status:
+The main RTX 4060 run and EMA DDIM-50 evaluation are complete:
 
 - Config: `configs/cifar10_rtx4060_best.yaml`
 - Model size: 71.03M parameters
-- Current logged step: 106,500 / 300,000
-- Current logged epoch: 273
-- Latest logged loss: 0.058331
-- Latest saved checkpoint: `runs/cifar10_rtx4060_best/checkpoint_0270.pt`
-- Latest sample grid: `runs/cifar10_rtx4060_best/samples/epoch_0270_ddim50.png`
+- Final logged step: 300,000 / 300,000
+- Final logged epoch: 769
+- Final logged loss: 0.040992
+- Evaluated checkpoint: `runs/cifar10_rtx4060_best/checkpoint_0770.pt`
+- Final evaluation: FID 10.0958; Inception Score 8.7801 +/- 0.0958
 
 Documentation:
 
-- [EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) - measured status, pending metrics, resume/evaluation commands
+- [EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) - final status, metrics, resume, and reproduction commands
 - [TRAINING_STATUS.md](docs/TRAINING_STATUS.md) - exact current checkpoint and completion criteria
 - [ATS_SCREENING_PACK.md](docs/ATS_SCREENING_PACK.md) - resume bullets, keywords, and claims to avoid

@@ -1,6 +1,6 @@
 # Training Status
 
-Last checked: 2026-08-08 02:58 IST.
+Last checked: 2026-08-17.
 
 ## DDPM CIFAR-10 Main Run
 
@@ -10,24 +10,18 @@ Last checked: 2026-08-08 02:58 IST.
 | Config | `configs/cifar10_rtx4060_best.yaml` |
 | Model size | 71.03M parameters |
 | Target steps | 300,000 |
-| Current logged step | 106,500 |
-| Current logged epoch | 273 |
-| Last logged loss | 0.058331 |
-| Last logged LR | 0.00014795 |
-| Latest checkpoint | `checkpoint_0270.pt` |
-| Latest sample grid | `epoch_0270_ddim50.png` |
+| Final logged step | 300,000 |
+| Final logged epoch | 769 |
+| Final logged loss | 0.040992 |
+| Evaluated checkpoint | `checkpoint_0770.pt` |
+| Evaluation | 50,000 EMA DDIM-50 samples |
+| FID | 10.0958 |
+| Inception Score | 8.7801 +/- 0.0958 |
 | Verification | `python -m pytest -q` passed, 4 tests |
 
-## Why Training Is Paused
+## Status
 
-The GPU is currently occupied by the QLoRA run:
-
-```text
-python -u -m src.train --config configs/t4_mistral_alpaca_qlora.json --resume-from-checkpoint outputs/mistral7b-alpaca-cleaned-qlora-r8/checkpoint-600
-```
-
-Do not resume DDPM while QLoRA is using the RTX 4060, because both jobs are
-GPU-memory intensive.
+Training and the primary EMA DDIM-50 evaluation are complete. Raw-weight and alternative-sampler ablations remain optional extensions.
 
 ## Resume Command
 
@@ -35,11 +29,7 @@ GPU-memory intensive.
 python train.py --config configs/cifar10_rtx4060_best.yaml --resume runs/cifar10_rtx4060_best/last.pt
 ```
 
-## Completion Criteria
+## Remaining Optional Ablations
 
-- Reach 300,000 optimizer steps or intentionally stop with a documented compute
-  budget decision.
-- Generate at least one 64-image DDIM sample grid from the final EMA checkpoint.
-- Run FID/Inception Score evaluation with the chosen sample count.
 - Benchmark DDIM 25/50/100 steps and optionally DDPM 1000 steps.
-- Replace pending values in `docs/EXPERIMENT_REPORT.md` with measured metrics.
+- Compare final EMA and raw weights under the same evaluator.

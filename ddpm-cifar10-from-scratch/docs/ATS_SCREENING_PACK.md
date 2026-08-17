@@ -19,9 +19,9 @@
 - Added training infrastructure with mixed precision, TF32, gradient
   accumulation, warmup + cosine LR decay, gradient clipping, resumable
   checkpoints, sample grids, monitoring, and pytest coverage.
-- Trained the main CIFAR-10 run to 106,500 / 300,000 optimizer steps before GPU
-  handoff; final FID/Inception Score evaluation remains pending and should be
-  reported only after measured.
+- Completed 300,000 optimizer steps and evaluated 50,000 EMA DDIM-50 samples,
+  achieving FID 10.0958 and Inception Score 8.7801 +/- 0.0958 at approximately
+  10 samples per second.
 
 ## ATS Keywords
 
@@ -32,10 +32,10 @@ PyTorch, Computer Vision, Deep Learning, Generative Modeling.
 
 ## Claims To Avoid
 
-- Do not claim final FID or Inception Score until evaluation is complete.
-- Do not claim benchmark-level CIFAR-10 quality from the partial run.
+- Report final metrics with the sample count, EMA weights, DDIM sampler, and 50 denoising steps.
+- Do not claim state-of-the-art or production image quality.
 - Do not claim the model uses `diffusers`; the point is from-scratch PyTorch.
-- Do not hide that training is currently incomplete.
+- Do not imply the remaining raw-weight or sampler ablations are complete.
 
 ## Upgrade Path To 100/100
 

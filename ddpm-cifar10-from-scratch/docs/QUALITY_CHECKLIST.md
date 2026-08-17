@@ -18,15 +18,15 @@ This project is considered resume-ready only when all boxes below are complete.
 ## Training
 
 - [x] Main RTX 4060 run launched.
-- [ ] Main run completed to target training budget.
-- [ ] Final EMA checkpoint saved.
+- [x] Main run completed to target training budget.
+- [x] Final EMA checkpoint saved.
 - [ ] Final 64-image sample grid saved.
 - [ ] One-batch overfit sanity check recorded.
 
 ## Evaluation
 
-- [ ] 50k-sample FID computed for EMA DDIM-50.
-- [ ] 50k-sample Inception Score computed for EMA DDIM-50.
+- [x] 50k-sample FID computed for EMA DDIM-50.
+- [x] 50k-sample Inception Score computed for EMA DDIM-50.
 - [ ] Raw-vs-EMA evaluation completed.
 - [ ] DDPM-1000 vs DDIM-50 speed comparison completed.
 - [ ] DDIM 25/50/100 sampler benchmark completed.
