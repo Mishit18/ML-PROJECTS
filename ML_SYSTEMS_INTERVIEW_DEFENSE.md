@@ -22,6 +22,13 @@ The ML resume should be defended as a complete ML stack:
 - The forward noising process has a closed form, so noisy samples can be drawn at arbitrary timesteps.
 - DDIM sampling trades stochasticity for faster deterministic sampling.
 - EMA weights usually improve generation stability because they smooth noisy parameter updates.
+- Final evaluation used 50,000 generated samples with DDIM-50 and reported FID 10.0958, Inception Score 8.7801 +/- 0.0958, and around 10 samples/sec.
+
+## Mini-GPT Talking Points
+
+- The model uses a modern decoder-only architecture with causal attention, RoPE, RMSNorm, SwiGLU, grouped-query attention, tied embeddings, and KV-cache decoding.
+- The strongest evidence is measured improvement, not just implementation: validation perplexity improved from 14.25 to 9.82 after longer training and low-LR continuation.
+- The old GPT-style baseline comparison is a controlled small-model-budget comparison, so present it as a relative architecture/training improvement rather than a claim of frontier LLM quality.
 
 ## Serving Talking Points
 
@@ -32,5 +39,5 @@ The ML resume should be defended as a complete ML stack:
 ## What Not To Overclaim
 
 - QLoRA is completed, but MMLU and fixed-prompt human eval are not yet final evidence.
-- DDPM has training artifacts and samples, but final FID/IS are not yet computed.
+- DDPM has final FID/IS on CIFAR-10, but it is still a class-unconditional academic image-generation project, not a production image model.
 - FastAPI serving is production-style, not a deployed commercial system.
