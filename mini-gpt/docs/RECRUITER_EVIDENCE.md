@@ -2,21 +2,21 @@
 
 ## Project
 
-Mistral-7B QLoRA Instruction Tuning
+Mini-GPT: Decoder-Only Transformer
 
 ## Data provenance
 
-Alpaca-cleaned instruction data plus held-out evaluation and ARC-Easy diagnostic.
+TinyStories training and validation tokens.
 
 ## Truth boundary
 
-Real single-GPU fine-tuning and evaluation; downstream benchmark result is mixed and documented.
+Real small-model training and local KV-cache benchmark; not a frontier-scale LLM.
 
 ## Primary evidence
 
-- `reports/FINAL_REPORT.md`
-- `reports/FINAL_MODEL_CARD.md`
-- `reports/ARC_EASY_DIAGNOSTIC.md`
+- `reports/PROJECT_EVIDENCE.md`
+- `reports/MODEL_CARD.md`
+- `reports/COMPARISON_REPORT.md`
 
 ## One-command verification
 
